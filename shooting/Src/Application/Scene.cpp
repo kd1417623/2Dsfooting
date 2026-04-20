@@ -22,7 +22,7 @@ void Scene::Update()
 {
 	if (!player.GetAlive())
 	{
-		if (GetAsyncKeyState(VK_RETURN)&0x8000)
+		if (GetAsyncKeyState(VK_SHIFT)&0x8000)
 		{
 			Restart();
 		}
