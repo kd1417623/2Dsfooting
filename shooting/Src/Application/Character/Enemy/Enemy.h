@@ -41,6 +41,7 @@ private:
 	bool allshot = false;
 
 	Math::Color color = { 1,1,1,1 };
+	bool PlayerAlive = true;
 
 };
 

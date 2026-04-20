@@ -10,22 +10,27 @@ C_Enemy::~C_Enemy()
 
 void C_Enemy::Update()
 {
-	if (HP<=0)
+	if (PlayerAlive)
 	{
-		alive = false;
-	}
-	for (auto& b : bullet)
-	{
-		b.Update();
 
-	}
 
-	 center += move;
-	// move = { 0,0 };
-	//angle += movespeed;
-	//pos.x = center.x + cosf(angle) * radius;
-	//pos.y = center.y + sinf(angle) * radius;
-	pos += move;
+		if (HP <= 0)
+		{
+			alive = false;
+		}
+		for (auto& b : bullet)
+		{
+			b.Update();
+
+		}
+
+		center += move;
+		// move = { 0,0 };
+		//angle += movespeed;
+		//pos.x = center.x + cosf(angle) * radius;
+		//pos.y = center.y + sinf(angle) * radius;
+		pos += move;
+	}
 	mat = Math::Matrix::CreateRotationZ(pictangle) *
 		Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
 }
@@ -62,7 +67,8 @@ void C_Enemy::Init(float circlesize)
 
 void C_Enemy::Action()
 {
-	if (!alive)
+	PlayerAlive = SCENE.GetPlayer()->GetAlive();
+	if (!alive||!PlayerAlive)
 	{
 		return;
 	}

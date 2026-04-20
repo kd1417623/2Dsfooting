@@ -115,16 +115,20 @@ void C_Hit::Enemy_BulletHit()
 
 void C_Hit::Enemy_PlayerHit()
 {
-	for (int i = 0; i < SCENE.GetEnemynum(); i++)
+	if (SCENE.GetPlayer()->GetAlive())
 	{
-		
+
+
+		for (int i = 0; i < SCENE.GetEnemynum(); i++)
+		{
+
 
 			C_Enemy* enemy = SCENE.GetEnemy(i);
 			C_Player* player = SCENE.GetPlayer();
-			Math::Vector2 enemyPos = enemy->GetPos() ;
-			Math::Vector2 playerPos = player->GetPos() ;
+			Math::Vector2 enemyPos = enemy->GetPos();
+			Math::Vector2 playerPos = player->GetPos();
 
-		
+
 			float dx = enemyPos.x - playerPos.x;
 			float dy = enemyPos.y - playerPos.y;
 			float dist = sqrtf(dx * dx + dy * dy);
@@ -140,14 +144,15 @@ void C_Hit::Enemy_PlayerHit()
 				dy /= dist;//y距離/直接距離(現在の角度に変換)
 				enemy->SetPos(enemyPos + Math::Vector2(dx * push, dy * push));
 				player->Damage(10);
-				enemy->SetMove({0,0});
+				//enemy->SetMove({ 0,0 });
 			}
 
 
 
-		
 
 
+
+		}
 	}
 
 }
