@@ -11,6 +11,9 @@ public:
 
 private:
 
+	const float PlayerInvincibleMaxTime = 120;
+	float PlayerInvincibleTime = PlayerInvincibleMaxTime;
+
 };
 
 

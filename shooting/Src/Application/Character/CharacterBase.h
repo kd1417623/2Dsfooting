@@ -24,6 +24,8 @@ public:
 	virtual void Damage(float _damage) { }
 
 	bool GetAlive() { return alive; }
+
+	virtual void Death() {};
 private:
 
 

@@ -19,7 +19,7 @@ private:
 	C_Hit hit;
 
 
-	int nowscene = title;
+	Gamescene nowscene = title;
 	// テクスチャ ・・・ 画像データ
 	KdTexture charaTex;
 	POINT mousePos;

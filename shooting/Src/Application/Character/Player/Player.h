@@ -4,7 +4,7 @@
 class C_Player:public C_Character
 {
 public:
-	static const int BulletNum = 30;
+	static const int BulletNum = 50;
 	C_Bullet m_bullet[BulletNum];
 	C_Player();
 	~C_Player();
@@ -16,8 +16,14 @@ public:
 	void ImGuiUpdate();
 	void BulletSetTex(KdTexture* tex);
 
+	void Death() override {
+		alive = false;
+	}
 	void Damage(float _damage) override { HP -= _damage; if (HP < 0) { HP = 0; } }
 	int GetBulletNum() { return BulletNum; }
+
+	void SetKillCount(float _KillCount) { KillCount = _KillCount; }
+	float GetKillCount() { return KillCount; }
 private:
 	Math::Vector2 movecount;
 	Math::Vector2 posMax;
@@ -28,6 +34,7 @@ private:
 	float mouseangle;
 
 
+	float KillCount = 0;
 
 
 	float playeranimX=0;

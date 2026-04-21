@@ -22,6 +22,22 @@ public:
 
 	void Damage(float _damage) override { HP -= _damage; if (HP < 0) { HP = 0; } color = { 1, 0, 0, 1 }; }
 
+	C_Bullet* GetBullet(int num) { return &bullet[num]; }
+
+
+	void Reborn() {
+		HP = maxHP;
+		color = { 1,1,1,1 };
+		//PlayerAlive = true;
+		moveswitch = false;
+		movecount = { 0,0 };
+		alive = true;
+		pos = Math::Vector2(rand() % 3200 - 1600, 360);
+	}
+	void Death() override {
+		alive = false;
+		color = { 1,1,1,0 };
+	}
 private:
 	Math::Vector2 movecount;
 	Math::Vector2 posMax;

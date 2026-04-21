@@ -75,6 +75,11 @@ void C_Player::Init(float	 circlesize)
 
 void C_Player::Action()
 {
+	if (!alive)
+	{
+		return;
+	}
+	//‰ŠúˆÄ==============================
 	//if (GetAsyncKeyState('A') & 0x8000)
 	//{
 	//	angle += 0.05f; // ¶‰ñ“]
@@ -94,14 +99,15 @@ void C_Player::Action()
 	//{
 	//	radius-=5;
 	//}
+	//====================================
 	if (GetAsyncKeyState('A') & 0x8000)
 	{
-		move.x = -21.0f; // ¶‰ñ“]
+		move.x = -21.0f;
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000)
 	{
-		move.x = 21.0f; // ‰E‰ñ“]
+		move.x = 21.0f; 
 	}
 
 	if (GetAsyncKeyState('W') & 0x8000)

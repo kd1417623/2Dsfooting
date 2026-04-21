@@ -17,6 +17,7 @@ void C_Enemy::Update()
 		if (HP <= 0)
 		{
 			alive = false;
+			SCENE.GetPlayer()->SetKillCount(SCENE.GetPlayer()->GetKillCount() + 1);
 		}
 		for (auto& b : bullet)
 		{
@@ -70,8 +71,16 @@ void C_Enemy::Action()
 	PlayerAlive = SCENE.GetPlayer()->GetAlive();
 	if (!alive||!PlayerAlive)
 	{
+		if (PlayerAlive)
+		{
+			if (rand()%5>3)
+			{
+				Reborn();
+			}
+		}
 		return;
 	}
+
 	//if (moveswitch)
 	//{
 	//	if (radius<1)

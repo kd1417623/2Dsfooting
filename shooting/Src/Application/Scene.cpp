@@ -5,45 +5,85 @@ void Scene::Draw2D()
 {
 	// •¶Žš—ñ•\Ž¦
 
-	player.Draw();
+//	player.Draw();
 
-	for (auto& i : enemy)
-	{
-		i.Draw();
-	}
+	char killstext[50];
+	sprintf_s(killstext, "GameOver\n %dKills", (int)player.GetKillCount());
 
-	if (!player.GetAlive())
-	{
-		SHADER.m_spriteShader.DrawString(100, 100, "GameOver", Math::Vector4(1, 0, 0, 1));
-	}
+		switch (nowscene)
+		{
+		case Scene::title:	
+			SHADER.m_spriteShader.DrawString(100, 100, "title", Math::Vector4(1, 1, 1, 1));
+
+			break;
+		case Scene::main:
+			player.Draw();
+			for (auto& i : enemy)
+			{
+				i.Draw();
+			}
+			break;
+		case Scene::result:
+
+			SHADER.m_spriteShader.DrawString(100, 100, killstext, Math::Vector4(1, 0, 0, 1));
+
+			break;
+		default:
+			break;
+		}
+	
 }
 
 void Scene::Update()
 {
-	if (!player.GetAlive())
+	switch (nowscene)
 	{
-		if (GetAsyncKeyState(VK_SHIFT)&0x8000)
+	case Scene::title:
+		if (GetAsyncKeyState(VK_RETURN)&0x8000)
 		{
+			nowscene = main;
+
+		}
+		break;
+	case Scene::main:
+		if (!player.GetAlive())
+		{
+			nowscene = result;
+		}
+			player.Action();
+			player.Update();
+			for (auto& i : enemy)
+			{
+				i.Action();
+
+			}
+			hit.Enemy_EnemyHit();
+			hit.Enemy_BulletHit();
+
+			hit.Enemy_PlayerHit();
+			for (auto& i : enemy)
+			{
+				i.Update();
+
+
+			}
+		
+		break;
+	case Scene::result:
+		if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
+		{
+			nowscene = title;
 			Restart();
 		}
+		break;
+	default:
+		break;
 	}
-	player.Action();
-	player.Update();
-	for (auto& i : enemy)
+	if (!player.GetAlive())
 	{
-		i.Action();
-
+	
 	}
-	hit.Enemy_EnemyHit();
-	hit.Enemy_BulletHit();
 
-	hit.Enemy_PlayerHit();
-	for (auto& i : enemy)
-	{
-		i.Update();
-
-
-	}
 }
 
 void Scene::Restart()

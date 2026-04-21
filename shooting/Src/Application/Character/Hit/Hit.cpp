@@ -115,39 +115,50 @@ void C_Hit::Enemy_BulletHit()
 
 void C_Hit::Enemy_PlayerHit()
 {
+
 	if (SCENE.GetPlayer()->GetAlive())
 	{
 
-
+		PlayerInvincibleTime--;
 		for (int i = 0; i < SCENE.GetEnemynum(); i++)
 		{
+		
 
 
-			C_Enemy* enemy = SCENE.GetEnemy(i);
-			C_Player* player = SCENE.GetPlayer();
-			Math::Vector2 enemyPos = enemy->GetPos();
-			Math::Vector2 playerPos = player->GetPos();
 
 
-			float dx = enemyPos.x - playerPos.x;
-			float dy = enemyPos.y - playerPos.y;
-			float dist = sqrtf(dx * dx + dy * dy);
+				C_Enemy* enemy = SCENE.GetEnemy(i);
+				C_Player* player = SCENE.GetPlayer();
+				Math::Vector2 enemyPos = enemy->GetPos();
+				Math::Vector2 playerPos = player->GetPos();
+				if (!enemy->GetAlive())
+				{
+					continue;
+				}
 
-			float minDist = 64.0f;//最低距離
+				float dx = enemyPos.x - playerPos.x;
+				float dy = enemyPos.y - playerPos.y;
+				float dist = sqrtf(dx * dx + dy * dy);
 
-			if (dist < minDist && dist > 0.0f)
-			{
-				float push = (minDist - dist);
+				float minDist = 64.0f;//最低距離
+
+				if (dist < minDist && dist > 0.0f)
+				{
+					float push = (minDist - dist);
 
 
-				dx /= dist;//x距離/直接距離(現在の角度に変換)
-				dy /= dist;//y距離/直接距離(現在の角度に変換)
-				enemy->SetPos(enemyPos + Math::Vector2(dx * push, dy * push));
-				player->Damage(10);
-				//enemy->SetMove({ 0,0 });
+					dx /= dist;//x距離/直接距離(現在の角度に変換)
+					dy /= dist;//y距離/直接距離(現在の角度に変換)
+					enemy->SetPos(enemyPos + Math::Vector2(dx * push, dy * push));
+					if (PlayerInvincibleTime <= 0)
+					{
+						PlayerInvincibleTime = 0;
+					PlayerInvincibleTime = PlayerInvincibleMaxTime;
+					player->Damage(10);
+					//enemy->SetMove({ 0,0 });
+				}
+
 			}
-
-
 
 
 
