@@ -1,5 +1,9 @@
 #include"Hit.h"
 #include"../../Scene.h"
+#include"../Enemy/Enemy.h"
+#include"../Player/Player.h"
+#include"../Player/Bullet.h"
+
 C_Hit::C_Hit()
 {
 }
@@ -82,7 +86,7 @@ void C_Hit::Enemy_BulletHit()
 		for (int h = 0; h <SCENE.GetEnemynum(); h++)
 		{
 			C_Enemy* enemy = SCENE.GetEnemy(h);
-			C_Bullet* bullet = SCENE.GetPlayerBullet(i);
+			C_Bullet* bullet = SCENE.GetPlayer()->GetBullet(i);
 			Math::Vector2 enemyPos = enemy->GetPos();
 			Math::Vector2 bulletPos = bullet->GetPos();
 		

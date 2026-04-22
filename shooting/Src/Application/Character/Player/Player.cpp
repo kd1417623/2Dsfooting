@@ -8,6 +8,10 @@ C_Player::C_Player()
 }
 C_Player::~C_Player()
 {
+	for (auto& bullet : m_bullet)
+	{
+		delete bullet;
+	}
 }
 
 void C_Player::Update()
@@ -44,7 +48,7 @@ void C_Player::Draw()
 	SHADER.m_spriteShader.DrawTex(tex, Math::Rectangle{(int)playeranimX*64,0,64,64 }, 1.0f);
 	for(auto& bullet : m_bullet)
 	{
-		bullet.Draw(false);
+		bullet->Draw(false);
 	}
 }
 
@@ -67,7 +71,8 @@ void C_Player::Init(float	 circlesize)
 
 	for(auto& bullet : m_bullet)
 	{
-		bullet.Init();
+		bullet = new C_Bullet();
+		bullet->Init();
 	}
 
 
@@ -123,7 +128,7 @@ void C_Player::Action()
 	{
 		for (auto & i :m_bullet)
 		{
-		if(!i.Shot(pos, Math::Vector2(cosf(mouseangle + ToRadians(90))*30, sinf(mouseangle + ToRadians(90))*30)))
+		if(!i->Shot(pos, Math::Vector2(cosf(mouseangle + ToRadians(90))*30, sinf(mouseangle + ToRadians(90))*30)))
 			{
 				break;
 		}
@@ -134,8 +139,9 @@ void C_Player::Action()
 	{
 		for (auto& i : m_bullet)
 		{
-			if (!i.Shot(pos+ Math::Vector2(cosf(mouseangle + ToRadians(90)) * 50, sinf(mouseangle + ToRadians(90)) * 50), Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
-			{				i.SetFreeze(true);
+			if (!i->Shot(pos+ Math::Vector2(cosf(mouseangle + ToRadians(90)) * 50, sinf(mouseangle + ToRadians(90)) * 50), Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
+			{				
+				i->SetFreeze(true);
 
 				break;
 			}
@@ -147,17 +153,18 @@ void C_Player::Action()
 	{
 		for (auto& i : m_bullet)
 		{
-			i.SetFreeze(false);
+			i->SetFreeze(false);
 		}
 	}
 	for (auto& bullet : m_bullet)
 	{
-		bullet.Update();
+		bullet->Update();
 	}
 }
 void C_Player::ImGuiUpdate()
 {
 	ImGui::Text("Player Pos : (%.2f, %.2f)", pos.x, pos.y);
+	ImGui::Text("Hp : %.2f", HP);
 
 }
 
@@ -165,6 +172,11 @@ void C_Player::BulletSetTex(KdTexture* tex)
 {
 	for (auto& bullet : m_bullet)
 	{
-		bullet.SetTexture(tex);
+		bullet->SetTexture(tex);
 	}
+}
+
+C_Bullet* C_Player::GetBullet(int num)
+{
+	return m_bullet[num];
 }

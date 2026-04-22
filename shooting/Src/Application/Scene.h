@@ -1,7 +1,9 @@
 #pragma once
-#include"Character/Player/Player.h"
-#include"Character/Enemy/Enemy.h"
-#include"Character/Hit/Hit.h"
+
+class C_Player;
+class C_Enemy;
+class C_Hit;
+class EnemyTurret;
 class Scene
 {
 private:
@@ -14,10 +16,10 @@ private:
 	static const int WindowWIDTH = 1280;
 	static const int WindowHEIGHT = 720;
 
-	C_Player player;
-	C_Enemy enemy[EnemyNum];
-	C_Hit hit;
-
+	C_Player* player;
+	C_Enemy* enemy[EnemyNum];
+	C_Hit *hit;
+	EnemyTurret *turret[EnemyNum];
 
 	Gamescene nowscene = title;
 	// テクスチャ ・・・ 画像データ
@@ -26,7 +28,7 @@ private:
 	KdTexture playerTex;
 
 	KdTexture bulletTex;
-
+	KdTexture grassTex;
 
 	KdTexture enemyTex;
 	// 行列 ・・・ 座標などの情報
@@ -53,15 +55,13 @@ public:
 	POINT getMousePos();
 
 
-	Math::Vector2 getPlayerPos() { return player.GetPos(); }
-	C_Enemy* GetEnemy(int num) { return &enemy[num]; }
+	C_Enemy* GetEnemy(int num) { return enemy[num]; }
 	int GetEnemynum() { return EnemyNum; }
 
-	C_Player* GetPlayer() { return &player; }
+	C_Player* GetPlayer() { return player; }
 	
 
 
-	C_Bullet* GetPlayerBullet(int num) { return &player.m_bullet[num]; }
 private:
 
 	Scene() {}

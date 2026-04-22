@@ -55,6 +55,9 @@
     <Filter Include="Src\Application\Character\Hit">
       <UniqueIdentifier>{083b24cb-f08c-4836-8dc0-cd5ada2e78b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Character\Effect">
+      <UniqueIdentifier>{2c106103-8984-40b0-b0ee-25e4524cc332}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -165,6 +168,12 @@
     <ClInclude Include="Src\Application\Character\Hit\Hit.h">
       <Filter>Src\Application\Character\Hit</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Character\Effect\Grass.h">
+      <Filter>Src\Application\Character\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Character\Enemy\EnemyTurret.h">
+      <Filter>Src\Application\Character\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -244,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Character\Hit\Hit.cpp">
       <Filter>Src\Application\Character\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Character\Effect\Grass.cpp">
+      <Filter>Src\Application\Character\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Character\Enemy\EnemyTurret.cpp">
+      <Filter>Src\Application\Character\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

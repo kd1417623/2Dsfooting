@@ -160,7 +160,9 @@
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Character\CharacterBase.h" />
+    <ClInclude Include="Src\Application\Character\Effect\Grass.h" />
     <ClInclude Include="Src\Application\Character\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Application\Character\Enemy\EnemyTurret.h" />
     <ClInclude Include="Src\Application\Character\Hit\Hit.h" />
     <ClInclude Include="Src\Application\Character\Player\Bullet.h" />
     <ClInclude Include="Src\Application\Character\Player\Player.h" />
@@ -190,7 +192,9 @@
     <ClCompile Include="..\Library\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Character\CharacterBase.cpp" />
+    <ClCompile Include="Src\Application\Character\Effect\Grass.cpp" />
     <ClCompile Include="Src\Application\Character\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Application\Character\Enemy\EnemyTurret.cpp" />
     <ClCompile Include="Src\Application\Character\Hit\Hit.cpp" />
     <ClCompile Include="Src\Application\Character\Player\Bullet.cpp" />
     <ClCompile Include="Src\Application\Character\Player\Player.cpp" />

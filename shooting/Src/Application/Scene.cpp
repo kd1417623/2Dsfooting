@@ -1,6 +1,9 @@
 #include "main.h"
 #include "Scene.h"
-
+#include"Character/Player/Player.h"
+#include"Character/Enemy/Enemy.h"
+#include"Character/Enemy/EnemyTurret.h"
+#include"Character/Hit/Hit.h"
 void Scene::Draw2D()
 {
 	// 文字列表示
@@ -8,7 +11,7 @@ void Scene::Draw2D()
 //	player.Draw();
 
 	char killstext[50];
-	sprintf_s(killstext, "GameOver\n %dKills", (int)player.GetKillCount());
+	sprintf_s(killstext, "GameOver\n %dKills", (int)player->GetKillCount());
 
 		switch (nowscene)
 		{
@@ -17,10 +20,10 @@ void Scene::Draw2D()
 
 			break;
 		case Scene::main:
-			player.Draw();
+			player->Draw();
 			for (auto& i : enemy)
 			{
-				i.Draw();
+				i->Draw();
 			}
 			break;
 		case Scene::result:
@@ -46,24 +49,24 @@ void Scene::Update()
 		}
 		break;
 	case Scene::main:
-		if (!player.GetAlive())
+		if (!player->GetAlive())
 		{
 			nowscene = result;
 		}
-			player.Action();
-			player.Update();
+			player->Action();
+			player->Update();
 			for (auto& i : enemy)
 			{
-				i.Action();
+				i->Action();
 
 			}
-			hit.Enemy_EnemyHit();
-			hit.Enemy_BulletHit();
+			hit->Enemy_EnemyHit();
+			hit->Enemy_BulletHit();
 
-			hit.Enemy_PlayerHit();
+			hit->Enemy_PlayerHit();
 			for (auto& i : enemy)
 			{
-				i.Update();
+				i->Update();
 
 
 			}
@@ -79,7 +82,7 @@ void Scene::Update()
 	default:
 		break;
 	}
-	if (!player.GetAlive())
+	if (!player->GetAlive())
 	{
 	
 	}
@@ -88,37 +91,40 @@ void Scene::Update()
 
 void Scene::Restart()
 {
-	player.Init(100);
+	player->Init(100);
 	for (auto& i : enemy)
 	{
-		i.Init(300);
-		i.SetAlive(true);
-		i.SetHP(100);
+		i->Init(300);
+		i->SetAlive(true);
+		i->SetHP(100);
 	}
-	player.SetAlive(true);
-	player.SetHP(100);
+	player->SetAlive(true);
+	player->SetHP(100);
 }
 
 void Scene::Init()
 {	srand(time(0));
 
+player = new C_Player();
 
+hit = new C_Hit();
 	playerTex.Load("Texture/player.png");
-	player.SetTex(&playerTex);
+	player->SetTex(&playerTex);
 	// 画像の読み込み処理
 	charaTex.Load("player.png");	
-	player.Init(100);
+	player->Init(100);
 
 	bulletTex.Load("Texture/bullet.png");
-	player.BulletSetTex(&bulletTex);
+	player->BulletSetTex(&bulletTex);
 
 	enemyTex.Load("Texture/enemy.png");
-
+	grassTex.Load("Texture/Grass3.png");
 	for(auto&i:enemy)
 	{
-i.SetTex(&enemyTex);
-i.SetBulletTex(&bulletTex);
-i.Init(300);
+		i = new C_Enemy();	
+i->SetTex(&enemyTex);
+i->Init(300);
+i->SetGrassTex(&grassTex);
 	}
 
 
@@ -128,6 +134,21 @@ void Scene::Release()
 {
 	// 画像の解放処理
 	charaTex.Release();
+
+	for (auto& i : enemy)
+	{
+
+		delete i;
+		i = nullptr;
+	}
+	delete player;
+	delete hit;
+
+	playerTex.Release();
+	bulletTex.Release();
+	grassTex.Release();
+	enemyTex.Release();
+
 }
 
 void Scene::ImGuiUpdate()
@@ -140,7 +161,7 @@ void Scene::ImGuiUpdate()
 	// デバッグウィンドウ
 	if (ImGui::Begin("Debug Window"))
 	{
-		player.ImGuiUpdate();
+		player->ImGuiUpdate();
 		ImGui::Text("FPS : %d", APP.m_fps);
 	}
 	ImGui::End();

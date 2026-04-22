@@ -1,28 +1,21 @@
 #pragma once
 #include"../CharacterBase.h"
-#include"../Player/Bullet.h"
+class Grass;
 class C_Enemy:public C_Character
 {
 public:
 	C_Enemy();
 	~C_Enemy();
-	C_Bullet bullet[20];
+	Grass *grass[20];
 	void Update() override;
 	void Draw() override;
 	void Init(float	 circlesize) override;
 	void Action();
 	void SetTex(KdTexture* _tex) { tex = _tex; }
 
-	void SetBulletTex(KdTexture* _tex) {
-		for (int i = 0; i < 20; i++)
-		{
-			bullet[i].SetTexture(_tex);
-		}
-	}
 
 	void Damage(float _damage) override { HP -= _damage; if (HP < 0) { HP = 0; } color = { 1, 0, 0, 1 }; }
 
-	C_Bullet* GetBullet(int num) { return &bullet[num]; }
 
 
 	void Reborn() {
@@ -38,6 +31,8 @@ public:
 		alive = false;
 		color = { 1,1,1,0 };
 	}
+
+	void SetGrassTex(KdTexture* _tex);
 private:
 	Math::Vector2 movecount;
 	Math::Vector2 posMax;

@@ -1,15 +1,30 @@
 #include"Enemy.h"
 #include"../../Scene.h"
+#include"../../Character/Player/Player.h"
+#include"../Effect/Grass.h"
 C_Enemy::C_Enemy()
 {
+	for (auto& g : grass)
+	{
+		g = new Grass();
+		
+	}
 }
 
 C_Enemy::~C_Enemy()
 {
+	for (auto& g : grass)
+	{
+		delete g;
+	}
 }
 
 void C_Enemy::Update()
 {
+	for (auto& g : grass)
+	{
+		g->Update(0);
+	}
 	if (PlayerAlive)
 	{
 
@@ -17,12 +32,11 @@ void C_Enemy::Update()
 		if (HP <= 0)
 		{
 			alive = false;
+			for (auto& g : grass)
+			{
+				g->Emit(pos);                                 
+			}
 			SCENE.GetPlayer()->SetKillCount(SCENE.GetPlayer()->GetKillCount() + 1);
-		}
-		for (auto& b : bullet)
-		{
-			b.Update();
-
 		}
 
 		center += move;
@@ -38,6 +52,14 @@ void C_Enemy::Update()
 
 void C_Enemy::Draw()
 {
+	D3D.SetBlendState(BlendMode::Add);
+
+	for(auto &g:grass)
+	{
+		g->Draw(Math::Color{0,1,0,1});
+	}
+	D3D.SetBlendState(BlendMode::Alpha);
+
 	if (!alive)
 	{
 		return;
@@ -45,10 +67,6 @@ void C_Enemy::Draw()
 	SHADER.m_spriteShader.SetMatrix(mat);
 	SHADER.m_spriteShader.C_DrawTex(tex, Math::Rectangle{ 0,0,64,64 }, color);
 	color = { 1,1,1,1 };
-	for (auto& b : bullet)
-	{
-		b.Draw(true);
-	}
 }
 
 void C_Enemy::Init(float circlesize)
@@ -104,28 +122,21 @@ void C_Enemy::Action()
 	//	}
 	//}
 	pictangle = atan2f(
-		SCENE.getPlayerPos().y - pos.y,
-		SCENE.getPlayerPos().x - pos.x
+		SCENE.GetPlayer()->GetPos().y - pos.y,
+		SCENE.GetPlayer()->GetPos().x - pos.x
 	);
 	pictangle -= ToRadians(90);
 
 	move = Math::Vector2(cosf(pictangle + ToRadians(90)) * speed, sinf(pictangle + ToRadians(90)) * speed);
 
-	for (auto& b : bullet)
-	{
-	
-			if (!b.Shot(Math::Vector2{ 0,640 }, bulletmove))
-			{		
 
-				bulletmove.x += 1;
-			}
-		
 	
-	}
-	if (bulletmove.x>15)
-	{
-		bulletmove.x = -10;
+}
 
+void C_Enemy::SetGrassTex(KdTexture* _tex)
+{
+	for (int i = 0; i < 20; i++)
+	{
+		grass[i]->settex(_tex);
 	}
-	
 }

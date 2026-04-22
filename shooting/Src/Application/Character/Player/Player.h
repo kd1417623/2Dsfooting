@@ -1,11 +1,12 @@
 #pragma once
 #include"../CharacterBase.h"
-#include"Bullet.h"
+class C_Bullet;
 class C_Player:public C_Character
 {
 public:
 	static const int BulletNum = 50;
-	C_Bullet m_bullet[BulletNum];
+	C_Bullet *m_bullet[BulletNum];
+	C_Bullet* GetBullet(int num);
 	C_Player();
 	~C_Player();
 
@@ -24,6 +25,7 @@ public:
 
 	void SetKillCount(float _KillCount) { KillCount = _KillCount; }
 	float GetKillCount() { return KillCount; }
+
 private:
 	Math::Vector2 movecount;
 	Math::Vector2 posMax;
