@@ -25,15 +25,17 @@ void C_Player::Update()
 	//pos.x = center.x + cosf(angle) * radius;
 	//pos.y = center.y + sinf(angle) * radius;
 	pos += move;
+	scroll = pos;
 	move = { 0,0 };
 	 mouseangle = atan2f(
-		SCENE.getMousePos().y - pos.y,
-		SCENE.getMousePos().x - pos.x
+		SCENE.getMousePos().y - pos.y+scroll.y,
+		SCENE.getMousePos().x - pos.x+scroll.x
 	);	
 	mouseangle -= ToRadians(90);
 
 	mat = Math::Matrix::CreateRotationZ(mouseangle) *
-		Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
+		//Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
+		Math::Matrix::CreateTranslation(pos.x- scroll.x, pos.y - scroll.y, 0);
 	playeranimX+=0.5;
 }
 
@@ -128,7 +130,7 @@ void C_Player::Action()
 	{
 		for (auto & i :m_bullet)
 		{
-		if(!i->Shot(pos, Math::Vector2(cosf(mouseangle + ToRadians(90))*30, sinf(mouseangle + ToRadians(90))*30)))
+		if(!i->Shot(pos-scroll, Math::Vector2(cosf(mouseangle + ToRadians(90))*30, sinf(mouseangle + ToRadians(90))*30)))
 			{
 				break;
 		}
@@ -139,7 +141,7 @@ void C_Player::Action()
 	{
 		for (auto& i : m_bullet)
 		{
-			if (!i->Shot(pos+ Math::Vector2(cosf(mouseangle + ToRadians(90)) * 50, sinf(mouseangle + ToRadians(90)) * 50), Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
+			if (!i->Shot(pos+ Math::Vector2(cosf(mouseangle + ToRadians(90)) * 50, sinf(mouseangle + ToRadians(90)) * 50)-scroll, Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
 			{				
 				i->SetFreeze(true);
 

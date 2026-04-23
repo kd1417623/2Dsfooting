@@ -1,4 +1,7 @@
 #include"Bullet.h"
+#include"../../Scene.h"
+#include"Player.h"
+
 C_Bullet::C_Bullet()
 {
 }
@@ -21,10 +24,12 @@ bool C_Bullet::Shot( Math::Vector2& pos,  Math::Vector2& move)
 
 void C_Bullet::Update()
 {
+	Math::Vector2 PlayerScroll = SCENE.GetPlayer()->GetScroll();
 	if (!freze)
 	{
 		m_pos += m_move;
 	}
+	
 	if (m_pos.x>1280||m_pos.x<-1280)
 	{
 		m_shot = false;

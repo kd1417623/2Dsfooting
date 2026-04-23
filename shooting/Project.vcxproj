@@ -159,6 +159,7 @@
     <ClInclude Include="..\Library\tinygltf\stb_image.h" />
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
+    <ClInclude Include="Src\Application\Background\Background.h" />
     <ClInclude Include="Src\Application\Character\CharacterBase.h" />
     <ClInclude Include="Src\Application\Character\Effect\Grass.h" />
     <ClInclude Include="Src\Application\Character\Enemy\Enemy.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="..\Library\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Src\Application\Background\Background.cpp" />
     <ClCompile Include="Src\Application\Character\CharacterBase.cpp" />
     <ClCompile Include="Src\Application\Character\Effect\Grass.cpp" />
     <ClCompile Include="Src\Application\Character\Enemy\Enemy.cpp" />

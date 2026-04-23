@@ -25,7 +25,7 @@ public:
 		moveswitch = false;
 		movecount = { 0,0 };
 		alive = true;
-		pos = Math::Vector2(rand() % 3200 - 1600, 360);
+		pos = Math::Vector2(rand() % 3200 - 1600, 360)+PlayerScroll;
 	}
 	void Death() override {
 		alive = false;
@@ -54,5 +54,8 @@ private:
 	Math::Color color = { 1,1,1,1 };
 	bool PlayerAlive = true;
 
+
+
+	Math::Vector2 PlayerScroll = { 0,0 };
 };
 

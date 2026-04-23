@@ -12,7 +12,7 @@ public:
 	void Init();
 	void Draw(bool isRed);
 	void SetTexture(KdTexture* tex) { m_tex = tex; }
-	bool IsShot() const { return m_shot; }
+	bool IsShot()  { return m_shot; }
 
 	void SetFreeze(bool isFreeze) { freze = isFreeze; }
 

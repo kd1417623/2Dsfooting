@@ -25,19 +25,22 @@ public:
 
 	void SetKillCount(float _KillCount) { KillCount = _KillCount; }
 	float GetKillCount() { return KillCount; }
+	Math::Vector2 GetScroll() { return scroll; }
 
 private:
-	Math::Vector2 movecount;
-	Math::Vector2 posMax;
+	Math::Vector2 movecount{};
+	Math::Vector2 posMax{};
 	float angle = 0.0f;
 	float radius = 200.0f;
 	Math::Vector2 center = { 0, 000 };
-	POINT mousePos;
-	float mouseangle;
+	POINT mousePos = {};
+	float mouseangle=0.0f;
 
 
 	float KillCount = 0;
 
+
+	Math::Vector2 scroll = { 0,0 };
 
 	float playeranimX=0;
 

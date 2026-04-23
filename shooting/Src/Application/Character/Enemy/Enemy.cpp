@@ -34,20 +34,15 @@ void C_Enemy::Update()
 			alive = false;
 			for (auto& g : grass)
 			{
-				g->Emit(pos);                                 
+				g->Emit(pos-PlayerScroll);                                 
 			}
 			SCENE.GetPlayer()->SetKillCount(SCENE.GetPlayer()->GetKillCount() + 1);
 		}
 
-		center += move;
-		// move = { 0,0 };
-		//angle += movespeed;
-		//pos.x = center.x + cosf(angle) * radius;
-		//pos.y = center.y + sinf(angle) * radius;
 		pos += move;
 	}
 	mat = Math::Matrix::CreateRotationZ(pictangle) *
-		Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
+		Math::Matrix::CreateTranslation(pos.x-PlayerScroll.x, pos.y-PlayerScroll.y, 0);
 }
 
 void C_Enemy::Draw()
@@ -86,6 +81,7 @@ void C_Enemy::Init(float circlesize)
 
 void C_Enemy::Action()
 {
+	PlayerScroll = SCENE.GetPlayer()->GetScroll();
 	PlayerAlive = SCENE.GetPlayer()->GetAlive();
 	if (!alive||!PlayerAlive)
 	{
@@ -98,29 +94,6 @@ void C_Enemy::Action()
 		}
 		return;
 	}
-
-	//if (moveswitch)
-	//{
-	//	if (radius<1)
-	//	{
-	//		moveswitch = false;
-	//	}
-	//	else
-	//	{
-	//		radius-=5;
-	//	}
-	//}
-	//else
-	//{
-	//	if (radius>500)
-	//	{
-	//		moveswitch = true;
-	//	}
-	//	else
-	//	{
-	//		radius+=5;
-	//	}
-	//}
 	pictangle = atan2f(
 		SCENE.GetPlayer()->GetPos().y - pos.y,
 		SCENE.GetPlayer()->GetPos().x - pos.x

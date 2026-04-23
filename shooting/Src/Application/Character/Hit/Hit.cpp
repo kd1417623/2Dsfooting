@@ -83,12 +83,18 @@ void C_Hit::Enemy_BulletHit()
 {
 	for (int i = 0; i < SCENE.GetPlayer()->GetBulletNum(); i++)
 	{
+		
 		for (int h = 0; h <SCENE.GetEnemynum(); h++)
 		{
 			C_Enemy* enemy = SCENE.GetEnemy(h);
 			C_Bullet* bullet = SCENE.GetPlayer()->GetBullet(i);
+			if (!bullet->IsShot())
+			{
+
+				break;
+			}
 			Math::Vector2 enemyPos = enemy->GetPos();
-			Math::Vector2 bulletPos = bullet->GetPos();
+			Math::Vector2 bulletPos = bullet->GetPos()+SCENE.GetPlayer()->GetScroll();
 		
 
 			float dx = enemyPos.x - bulletPos.x;

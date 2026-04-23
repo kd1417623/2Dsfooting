@@ -4,15 +4,16 @@
 #include"Character/Enemy/Enemy.h"
 #include"Character/Enemy/EnemyTurret.h"
 #include"Character/Hit/Hit.h"
+#include"Background/Background.h"
 void Scene::Draw2D()
 {
 	// •¶Žš—ñ•\Ž¦
 
 //	player.Draw();
+			background->Draw();
 
 	char killstext[50];
 	sprintf_s(killstext, "GameOver\n %dKills", (int)player->GetKillCount());
-
 		switch (nowscene)
 		{
 		case Scene::title:	
@@ -20,6 +21,7 @@ void Scene::Draw2D()
 
 			break;
 		case Scene::main:
+
 			player->Draw();
 			for (auto& i : enemy)
 			{
@@ -106,7 +108,7 @@ void Scene::Init()
 {	srand(time(0));
 
 player = new C_Player();
-
+background = new C_Background();
 hit = new C_Hit();
 	playerTex.Load("Texture/player.png");
 	player->SetTex(&playerTex);

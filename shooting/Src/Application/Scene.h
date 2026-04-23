@@ -1,5 +1,6 @@
 #pragma once
 
+class C_Background;
 class C_Player;
 class C_Enemy;
 class C_Hit;
@@ -20,6 +21,8 @@ private:
 	C_Enemy* enemy[EnemyNum];
 	C_Hit *hit;
 	EnemyTurret *turret[EnemyNum];
+
+	C_Background* background;
 
 	Gamescene nowscene = title;
 	// テクスチャ ・・・ 画像データ
