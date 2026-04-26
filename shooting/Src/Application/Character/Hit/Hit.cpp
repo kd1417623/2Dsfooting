@@ -4,6 +4,9 @@
 #include"../Player/Player.h"
 #include"../Skill/Bullet.h"
 #include"../Enemy/EnemyTurret.h"
+static const int WindowWIDTH = 1280;
+static const int WindowHEIGHT = 720;
+
 C_Hit::C_Hit()
 {
 }
@@ -283,58 +286,27 @@ Math::Vector2 C_Hit::DisCompare()
 {
 	C_Player* player = SCENE.GetPlayer();
 	Math::Vector2 playerPos = player->GetPos();
+	float  CloseDist = FLT_MAX;
+	
 
-	if (SCENE.GetEnemynum() == 0 && SCENE.GetTurretNum() == 0)
-	{
-		return playerPos; //双方0体の場合プレイヤー座標を返す
-	}
-	Math::Vector2 enemypos = SCENE.GetEnemy(0)->GetPos();
-	//取り敢えず０番のenemyの情報に	============================
-	float dx = enemypos.x - playerPos.x;
-	float dy = enemypos.y - playerPos.y;
-	float dist = sqrtf(dx * dx + dy * dy);
-	Math::Vector2 ReturnPos = enemypos;
-	float  CloseDist =dist;
+	Math::Vector2 ReturnPos = { 0,0 };
+	Math::Vector2 enemypos = {0,0};
+
 	//===============================================
-	for (int i = 1;i < SCENE.GetEnemynum();i++)
+	for (int i = 0;i < SCENE.GetEnemynum();i++)
 	{
 
 	 enemypos = SCENE.GetEnemy(i)->GetPos();
-
-		 dx = enemypos.x - playerPos.x;
-		 dy = enemypos.y - playerPos.y;
-		  dist = dx * dx + dy * dy;
-		if (CloseDist>dist)
-		{
-			CloseDist = dist;
-			ReturnPos = enemypos;
-		}
-
-
-
-
+	 CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}
 	for (int i = 0; i < SCENE.GetTurretNum(); i++)
 	{
 		enemypos = SCENE.GetTurret(i)->GetPos();
-
-		dx = enemypos.x - playerPos.x;
-		dy = enemypos.y - playerPos.y;
-		dist = dx * dx + dy * dy;
-
-		if (CloseDist > dist)
-		{
-			CloseDist = dist;
-			ReturnPos = enemypos;
-		}
-
-
+		CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}
-	return ReturnPos;
-	
-	
+	return ReturnPos;	
 }
 
 

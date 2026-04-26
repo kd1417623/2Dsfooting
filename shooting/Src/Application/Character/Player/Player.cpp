@@ -1,5 +1,6 @@
 #include"Player.h"
 #include"../../Scene.h"
+#include"../Hit/Hit.h"
 #include "../Skill/Bullet.h"
 C_Player::C_Player()
 {
@@ -31,10 +32,25 @@ void C_Player::Update()
 	pos += move;
 	scroll = pos;
 	move = { 0,0 };
-	 mouseangle = atan2f(
-		SCENE.getMousePos().y - pos.y+scroll.y,
-		SCENE.getMousePos().x - pos.x+scroll.x
-	);	
+	
+	if (AutoShot)
+	{
+		mouseangle = atan2f(
+			SCENE.GetHit()->DisCompare().y - pos.y ,
+			SCENE.GetHit()->DisCompare().x - pos.x 
+		);
+
+
+	}
+	else
+	{
+		mouseangle = atan2f(
+			SCENE.getMousePos().y - pos.y + scroll.y,
+			SCENE.getMousePos().x - pos.x + scroll.x
+		);
+
+
+	}
 	mouseangle -= ToRadians(90);
 
 	mat = Math::Matrix::CreateRotationZ(mouseangle) *
@@ -132,7 +148,7 @@ void C_Player::Action()
 	{
 		move.y =-21;
 	}
-	if (GetAsyncKeyState(VK_LBUTTON)&0x8000)
+	if (GetAsyncKeyState(VK_LBUTTON)&0x8000||AutoShot)
 	{
 		if (OverHeat < OverHeatMax)
 		{
@@ -196,6 +212,16 @@ void C_Player::Action()
 		bullet->Update();
 	}
 
+	if (GetAsyncKeyState('Q')&0x8000)
+	{
+		AutoShot = true;
+
+	}
+	else
+	{
+		AutoShot = false;
+	}
+
 
 	if (OverHeatflg)
 	{
@@ -205,6 +231,11 @@ void C_Player::Action()
 			OverHeatflg = false;
 
 		}
+	}
+
+	if (AutoShot)
+	{
+
 	}
 }
 void C_Player::ImGuiUpdate()

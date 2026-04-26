@@ -246,3 +246,4 @@ void Scene::AllEnemy_Kills()
 		i->Damage(1000);
 	}
 }
+

@@ -52,4 +52,7 @@ private:
 	const float OverHeatMax=100;
 	bool OverHeatflg = false;
 	Math::Color m_color = {1,1,1,1};
+
+	bool AutoShot = false;
+	float CloseEnemyAngle = 0;
 };

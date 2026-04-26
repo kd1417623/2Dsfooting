@@ -46,6 +46,9 @@ private:
 	KdTexture TurretTex;
 
 
+	
+
+
 
 public:
 
@@ -77,6 +80,13 @@ public:
 	int GetTurretNum() { return TurretNum; }
 
 	void AllEnemy_Kills();
+
+
+	C_Hit* GetHit() { return hit; }
+
+
+	
+
 private:
 
 	Scene() {}
