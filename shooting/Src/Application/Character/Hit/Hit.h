@@ -9,6 +9,9 @@ public:
 
 	void Enemy_PlayerHit();	
 
+	void Turret_playerHit();
+	void Turret_BulletHit();
+
 private:
 
 	const float PlayerInvincibleMaxTime = 60;

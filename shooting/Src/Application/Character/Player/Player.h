@@ -20,7 +20,10 @@ public:
 	void Death() override {
 		alive = false;
 	}
-	void Damage(float _damage) override { HP -= _damage; if (HP < 0) { HP = 0; } }
+	void Damage(float _damage) override { m_color = { 1,0,0,1 };
+	HP -= _damage; 
+	if (HP < 0) { HP = 0; }
+	}
 	int GetBulletNum() { return BulletNum; }
 
 	void SetKillCount(float _KillCount) { KillCount = _KillCount; }
@@ -44,4 +47,9 @@ private:
 
 	float playeranimX=0;
 
+
+	float OverHeat=0;
+	const float OverHeatMax=100;
+	bool OverHeatflg = false;
+	Math::Color m_color = {1,1,1,1};
 };

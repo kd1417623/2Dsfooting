@@ -6,6 +6,7 @@ public:
 	~C_Bullet();
 
 	bool Shot( Math::Vector2& pos,  Math::Vector2& move);
+	bool Shot( Math::Vector2& pos,  Math::Vector2& move,bool EnemyShot);
 	Math::Vector2 GetPos() const { return m_pos; }
 	Math::Vector2 GetMove() const { return m_move; }
 	void Update();
@@ -16,6 +17,10 @@ public:
 
 	void SetFreeze(bool isFreeze) { freze = isFreeze; }
 
+	bool Off_SCreen(Math::Vector2 pos) {
+		return(pos.x > 640 || pos.x < -640 || pos.y >360 || pos.y < -360);
+	
+	}
 
 	void Setshot(bool isShot) { m_shot = isShot; }
 private:
@@ -26,6 +31,14 @@ private:
 	KdTexture* m_tex;
 
 
+
+	bool m_isEnemybullet = false;
+	bool m_FadeIn=false;
 	bool freze = false;
+
+
+	const float Timeout=360;	
+	float TimeoutCount=Timeout;
+
 };
 

@@ -1,8 +1,12 @@
 #include"Player.h"
 #include"../../Scene.h"
-#include "Bullet.h"
+#include "../Skill/Bullet.h"
 C_Player::C_Player()
 {
+	for (auto& bullet : m_bullet)
+	{
+		bullet = new C_Bullet();
+	}
 	angle = 0.0f;
 	center = { 0.0f, 0.0f };
 }
@@ -47,11 +51,13 @@ void C_Player::Draw()
 		return;
 	}
 	SHADER.m_spriteShader.SetMatrix(mat);
-	SHADER.m_spriteShader.DrawTex(tex, Math::Rectangle{(int)playeranimX*64,0,64,64 }, 1.0f);
+	SHADER.m_spriteShader.C_DrawTex(tex, Math::Rectangle{(int)playeranimX*64,0,64,64 }, m_color);
 	for(auto& bullet : m_bullet)
 	{
 		bullet->Draw(false);
 	}
+	m_color = { 1,1,1,1 };
+
 }
 
 void C_Player::Init(float	 circlesize)
@@ -71,9 +77,9 @@ void C_Player::Init(float	 circlesize)
 	mat = Math::Matrix::CreateRotationZ(mouseangle) *
 		Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
 
-	for(auto& bullet : m_bullet)
+	for (auto& bullet : m_bullet)
 	{
-		bullet = new C_Bullet();
+	
 		bullet->Init();
 	}
 
@@ -128,16 +134,43 @@ void C_Player::Action()
 	}
 	if (GetAsyncKeyState(VK_LBUTTON)&0x8000)
 	{
-		for (auto & i :m_bullet)
+		if (OverHeat < OverHeatMax)
 		{
-		if(!i->Shot(pos-scroll, Math::Vector2(cosf(mouseangle + ToRadians(90))*30, sinf(mouseangle + ToRadians(90))*30)))
-			{
-				break;
-		}
+			OverHeat++;
+
 
 		}
+		else
+		{
+			OverHeatflg = true;
+		}
+		//if (!OverHeatflg)
+		if (1)
+		{
+
+
+			for (auto& i : m_bullet)
+			{
+				if (!i->Shot(pos, Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
+				{
+					break;
+				}
+
+			}
+		}
+		else
+		{
+			OverHeat--;
+			if (OverHeat <= 0)
+			{
+				OverHeatflg = false;
+
+			}
+		}
+		
 	}
-	else if (GetAsyncKeyState(VK_RBUTTON)&0x8000)
+
+ else if (GetAsyncKeyState(VK_RBUTTON)&0x8000)
 	{
 		for (auto& i : m_bullet)
 		{
@@ -162,11 +195,23 @@ void C_Player::Action()
 	{
 		bullet->Update();
 	}
+
+
+	if (OverHeatflg)
+	{
+		OverHeat--;
+		if (OverHeat<=0)
+		{
+			OverHeatflg = false;
+
+		}
+	}
 }
 void C_Player::ImGuiUpdate()
 {
 	ImGui::Text("Player Pos : (%.2f, %.2f)", pos.x, pos.y);
 	ImGui::Text("Hp : %.2f", HP);
+	ImGui::Text("OH%.2f",OverHeat);
 
 }
 

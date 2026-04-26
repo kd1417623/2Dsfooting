@@ -1,6 +1,6 @@
 #pragma once
 #include"../CharacterBase.h"
-#include"../Player/Bullet.h"
+#include"../Skill/Bullet.h"
 class EnemyTurret : public C_Character
 {
 public:
@@ -12,6 +12,12 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Init(float	 circlesize) override;
+
+	void SetBulletTex(KdTexture *tex) { for (auto& i : bullet) { i.SetTexture(tex); } }
+
+	C_Bullet* GetBullet(int num) { return &bullet[num]; }
+	int GetBulletNum() { return BulletNum; }
+
 
 private:
 

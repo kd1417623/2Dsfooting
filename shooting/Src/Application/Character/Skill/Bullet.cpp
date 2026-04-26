@@ -1,6 +1,6 @@
 #include"Bullet.h"
 #include"../../Scene.h"
-#include"Player.h"
+#include"../Player/Player.h"
 
 C_Bullet::C_Bullet()
 {
@@ -12,6 +12,8 @@ C_Bullet::~C_Bullet()
 
 bool C_Bullet::Shot( Math::Vector2& pos,  Math::Vector2& move)
 {
+	Math::Vector2 PlayerScroll = SCENE.GetPlayer()->GetScroll();
+
 	if (m_shot)
 	{
 		return true;
@@ -19,7 +21,19 @@ bool C_Bullet::Shot( Math::Vector2& pos,  Math::Vector2& move)
 	m_shot = true;
 	m_pos = pos;
 	m_move = move;
-	return false;
+	
+
+if(Off_SCreen(pos - PlayerScroll))
+{
+		m_FadeIn = true;
+
+	}
+	else
+	{
+		m_FadeIn = false;
+	}
+return false;
+
 }
 
 void C_Bullet::Update()
@@ -30,15 +44,30 @@ void C_Bullet::Update()
 		m_pos += m_move;
 	}
 	
-	if (m_pos.x>1280||m_pos.x<-1280)
-	{
+	if (Off_SCreen(m_pos - PlayerScroll))
+	 {
+		if (!m_FadeIn)
+		{
 		m_shot = false;
+
+		}
+		else
+		{
+			TimeoutCount--;
+			if (TimeoutCount<=0)
+			{
+				TimeoutCount = Timeout;
+				m_FadeIn = false;
+			}
+		}
 	}
-	if (m_pos.y>720||m_pos.y<-720)
+	else if (m_FadeIn)
 	{
-		m_shot = false;
+		m_FadeIn = false;
 	}
-	m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+
+	m_mat = Math::Matrix::CreateTranslation(m_pos.x-PlayerScroll.x, m_pos.y-PlayerScroll.y, 0);
+	//m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 }
 void C_Bullet::Init()
 {

@@ -26,6 +26,7 @@ public:
 	bool GetAlive() { return alive; }
 
 	virtual void Death() {};
+
 private:
 
 

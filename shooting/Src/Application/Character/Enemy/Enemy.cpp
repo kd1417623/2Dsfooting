@@ -2,6 +2,8 @@
 #include"../../Scene.h"
 #include"../../Character/Player/Player.h"
 #include"../Effect/Grass.h"
+
+#include"../Skill/DamegeArea.h"
 C_Enemy::C_Enemy()
 {
 	for (auto& g : grass)
@@ -31,10 +33,12 @@ void C_Enemy::Update()
 
 		if (HP <= 0)
 		{
+			d_a->Smit(pos, 1, 50);
+
 			alive = false;
 			for (auto& g : grass)
 			{
-				g->Emit(pos-PlayerScroll);                                 
+				g->Emit(pos);                                 
 			}
 			SCENE.GetPlayer()->SetKillCount(SCENE.GetPlayer()->GetKillCount() + 1);
 		}
@@ -43,10 +47,16 @@ void C_Enemy::Update()
 	}
 	mat = Math::Matrix::CreateRotationZ(pictangle) *
 		Math::Matrix::CreateTranslation(pos.x-PlayerScroll.x, pos.y-PlayerScroll.y, 0);
+
+		d_a->Update();
+	
 }
 
 void C_Enemy::Draw()
 {
+	
+		d_a->Draw();
+	
 	D3D.SetBlendState(BlendMode::Add);
 
 	for(auto &g:grass)
@@ -77,6 +87,11 @@ void C_Enemy::Init(float circlesize)
 	//movespeed = rand() %  5 + 1;
 	movespeed = 5;
 	speed = (float)(rand() % 19 + 1);
+
+
+		d_a = new DamegeArea;
+		d_a->Init();
+	
 }
 
 void C_Enemy::Action()
@@ -89,6 +104,9 @@ void C_Enemy::Action()
 		{
 			if (rand()%5>3)
 			{
+			
+				
+
 				Reborn();
 			}
 		}

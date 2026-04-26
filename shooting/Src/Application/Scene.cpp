@@ -5,12 +5,17 @@
 #include"Character/Enemy/EnemyTurret.h"
 #include"Character/Hit/Hit.h"
 #include"Background/Background.h"
+#include"Background/Object.h"
 void Scene::Draw2D()
 {
 	// •¶š—ñ•\¦
 
 //	player.Draw();
 			background->Draw();
+		
+				backobj[0]->Draw({288,192});
+				backobj[1]->Draw({320,320});
+			
 
 	char killstext[50];
 	sprintf_s(killstext, "GameOver\n %dKills", (int)player->GetKillCount());
@@ -27,6 +32,11 @@ void Scene::Draw2D()
 			{
 				i->Draw();
 			}
+			for (auto& i : m_turret)
+			{
+				i->Draw();
+			}
+
 			break;
 		case Scene::result:
 
@@ -41,9 +51,17 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
+	for (auto& i : m_turret)
+	{
+		i->Update();
+	}
 	switch (nowscene)
 	{
 	case Scene::title:
+		for (auto& i : backobj)
+		{
+			i->Update();
+		}
 		if (GetAsyncKeyState(VK_RETURN)&0x8000)
 		{
 			nowscene = main;
@@ -51,11 +69,23 @@ void Scene::Update()
 		}
 		break;
 	case Scene::main:
+
+		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+		{
+			AllEnemy_Kills();
+		}
+
+
 		if (!player->GetAlive())
 		{
 			nowscene = result;
 		}
 			player->Action();
+			for (auto& i : backobj)
+			{
+				i->Update();
+			}
+
 			player->Update();
 			for (auto& i : enemy)
 			{
@@ -64,8 +94,9 @@ void Scene::Update()
 			}
 			hit->Enemy_EnemyHit();
 			hit->Enemy_BulletHit();
-
+			hit->Turret_playerHit();
 			hit->Enemy_PlayerHit();
+			hit->Turret_BulletHit();
 			for (auto& i : enemy)
 			{
 				i->Update();
@@ -108,8 +139,19 @@ void Scene::Init()
 {	srand(time(0));
 
 player = new C_Player();
-background = new C_Background();
+background = std::make_shared< C_Background>();
 hit = new C_Hit();
+for (auto &i :backobj)
+{
+	i= std::make_shared<C_Object>();
+
+
+}
+for (auto& i : m_turret)
+{
+	i = new EnemyTurret;
+	i->Init(0);
+}
 	playerTex.Load("Texture/player.png");
 	player->SetTex(&playerTex);
 	// ‰æ‘œ‚Ì“Ç‚İ‚İˆ—
@@ -123,12 +165,27 @@ hit = new C_Hit();
 	grassTex.Load("Texture/Grass3.png");
 	for(auto&i:enemy)
 	{
-		i = new C_Enemy();	
+		i = std::make_shared < C_Enemy>();
 i->SetTex(&enemyTex);
 i->Init(300);
 i->SetGrassTex(&grassTex);
 	}
+	TurretTex.Load("Texture/enemy2.png");
+	for (auto& i : m_turret)
+	{
+		i = new EnemyTurret;
+		i->Init(0);
+		i->SetTex(&TurretTex);
+		i->SetBulletTex(&bulletTex);
+	}
 
+	BackObjTex[0].Load("Texture/object.png");
+	BackObjTex[1].Load("Texture/object2.png");
+	
+	backobj[0]->Init();
+	backobj[1]->Init();
+	backobj[0]->SetTex(&BackObjTex[0]);
+	backobj[1]->SetTex(&BackObjTex[1]);
 
 }
 
@@ -137,15 +194,10 @@ void Scene::Release()
 	// ‰æ‘œ‚Ì‰ğ•úˆ—
 	charaTex.Release();
 
-	for (auto& i : enemy)
-	{
 
-		delete i;
-		i = nullptr;
-	}
 	delete player;
 	delete hit;
-
+	
 	playerTex.Release();
 	bulletTex.Release();
 	grassTex.Release();
@@ -181,4 +233,16 @@ POINT Scene::getMousePos()
 	mousepos.y -= WindowHEIGHT / 2;
 	mousepos.y *= -1;//Y‚ğ”½“]
 	return mousepos;
+}
+
+void Scene::AllEnemy_Kills()
+{
+	for (auto& i : enemy)
+	{
+		i->Damage(1000);
+	}
+	for (auto& i : m_turret)
+	{
+		i->Damage(1000);
+	}
 }

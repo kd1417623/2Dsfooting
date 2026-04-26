@@ -4,6 +4,7 @@ class C_Background;
 class C_Player;
 class C_Enemy;
 class C_Hit;
+class C_Object;
 class EnemyTurret;
 class Scene
 {
@@ -14,15 +15,19 @@ private:
 
 	};
 	static const int EnemyNum = 10;
+	static const int TurretNum = 10;
 	static const int WindowWIDTH = 1280;
 	static const int WindowHEIGHT = 720;
 
 	C_Player* player;
-	C_Enemy* enemy[EnemyNum];
-	C_Hit *hit;
-	EnemyTurret *turret[EnemyNum];
 
-	C_Background* background;
+	std::shared_ptr<C_Enemy>enemy[EnemyNum];
+	C_Hit *hit;
+	EnemyTurret *m_turret[TurretNum];
+
+
+	std::shared_ptr<C_Background>background=nullptr;
+	std::shared_ptr<C_Object>backobj[2] = {nullptr,nullptr};
 
 	Gamescene nowscene = title;
 	// テクスチャ ・・・ 画像データ
@@ -33,9 +38,14 @@ private:
 	KdTexture bulletTex;
 	KdTexture grassTex;
 
+	KdTexture BackObjTex[2];
 	KdTexture enemyTex;
 	// 行列 ・・・ 座標などの情報
 	Math::Matrix matrix;
+
+	KdTexture TurretTex;
+
+
 
 public:
 
@@ -58,13 +68,15 @@ public:
 	POINT getMousePos();
 
 
-	C_Enemy* GetEnemy(int num) { return enemy[num]; }
+	C_Enemy* GetEnemy(int num) { return enemy[num].get(); }
 	int GetEnemynum() { return EnemyNum; }
 
 	C_Player* GetPlayer() { return player; }
-	
 
+	EnemyTurret* GetTurret(int num) { return m_turret[num]; }
+	int GetTurretNum() { return TurretNum; }
 
+	void AllEnemy_Kills();
 private:
 
 	Scene() {}

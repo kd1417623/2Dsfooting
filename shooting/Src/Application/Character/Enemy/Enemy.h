@@ -1,5 +1,6 @@
 #pragma once
 #include"../CharacterBase.h"
+class DamegeArea;
 class Grass;
 class C_Enemy:public C_Character
 {
@@ -7,6 +8,7 @@ public:
 	C_Enemy();
 	~C_Enemy();
 	Grass *grass[20];
+	DamegeArea *d_a;
 	void Update() override;
 	void Draw() override;
 	void Init(float	 circlesize) override;

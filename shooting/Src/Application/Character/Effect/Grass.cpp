@@ -1,5 +1,6 @@
 #include"Grass.h"
-
+#include"../../Scene.h"
+#include"../Player/Player.h"
 Grass::Grass()
 {
 }
@@ -15,6 +16,7 @@ void Grass::Init()
 }
 void Grass::Update(float movespeed)
 {
+    Math::Vector2 Scroll = SCENE.GetPlayer()->GetScroll();
     cycle += Rnd() * 5;
 
     m_pos += m_move;
@@ -34,7 +36,7 @@ void Grass::Update(float movespeed)
     // 行列更新
     m_mat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(cycle)) *
         Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1.0f) *
-        Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0.0f);
+        Math::Matrix::CreateTranslation(m_pos.x-Scroll.x, m_pos.y-Scroll.y, 0.0f);
 
 }
 void Grass::Emit(const Math::Vector2& pos)
