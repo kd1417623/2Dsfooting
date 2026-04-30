@@ -25,6 +25,8 @@ public:
 
 	bool GetAlive() { return alive; }
 
+	float GetHp() { return HP; }
+
 	virtual void Death() {};
 
 private:

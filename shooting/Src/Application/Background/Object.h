@@ -3,8 +3,12 @@ class C_Object
 {
 public:
 	C_Object() {
-		//m_pos = { 999,999 };
+		Init();	
+		m_pos.x = rand() % 1240 - 620;
+		m_pos.y = rand() % 700 - 350;
+
 		m_scale = 0;
+
 	};
 	~C_Object() {};
 	void SetObjectTex(KdTexture* tex) { m_tex = tex; }

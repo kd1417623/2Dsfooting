@@ -1,6 +1,7 @@
 #include"Background.h"
 #include"../Scene.h"
 #include"../Character/Player/Player.h"
+#include"../Scene/SceneBase.h"
 C_Background::C_Background()
 {
 }
@@ -11,7 +12,7 @@ C_Background::~C_Background()
 
 void C_Background::Update()
 {
-	PlayerScroll = SCENE.GetPlayer()->GetScroll();
+	PlayerScroll = SCENE.GetNowScene()->GetPlayer()->GetScroll();
 
 }
 

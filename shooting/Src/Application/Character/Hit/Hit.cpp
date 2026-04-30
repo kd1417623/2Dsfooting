@@ -4,6 +4,7 @@
 #include"../Player/Player.h"
 #include"../Skill/Bullet.h"
 #include"../Enemy/EnemyTurret.h"
+#include"../../Scene/SceneBase.h"
 static const int WindowWIDTH = 1280;
 static const int WindowHEIGHT = 720;
 
@@ -17,16 +18,18 @@ C_Hit::~C_Hit()
 
 void C_Hit::Enemy_EnemyHit()
 {
-	for (int i = 0; i < SCENE.GetEnemynum(); i++)
+	for (int i = 0; i < SCENE.GetNowScene()->GetEnemynum()
+		; i++)
 	{
-		for (int h = i+1; h < SCENE.GetEnemynum(); h++)
+		for (int h = i+1; h < SCENE.GetNowScene()->GetEnemynum()
+			; h++)
 		{
 			if (i==h)
 			{
 				continue;
 			}
-			C_Enemy* enemy1 = SCENE.GetEnemy(i);
-			C_Enemy* enemy2 = SCENE.GetEnemy(h);
+			C_Enemy* enemy1 = SCENE.GetNowScene()->GetEnemy(i);
+			C_Enemy* enemy2 = SCENE.GetNowScene()->GetEnemy(h);
 			Math::Vector2 enemy1move = enemy1->GetMove();
 			Math::Vector2 enemy2move = enemy2->GetMove();
 			Math::Vector2 enemy1pos = enemy1->GetPos();
@@ -84,13 +87,13 @@ void C_Hit::Enemy_EnemyHit()
 
 void C_Hit::Enemy_BulletHit()
 {
-	for (int i = 0; i < SCENE.GetPlayer()->GetBulletNum(); i++)
+	for (int i = 0; i < SCENE.GetNowScene()->GetPlayer()->GetBulletNum(); i++)
 	{
 		
-		for (int h = 0; h <SCENE.GetEnemynum(); h++)
+		for (int h = 0; h < SCENE.GetNowScene()->GetEnemynum(); h++)
 		{
-			C_Enemy* enemy = SCENE.GetEnemy(h);
-			C_Bullet* bullet = SCENE.GetPlayer()->GetBullet(i);
+			C_Enemy* enemy = SCENE.GetNowScene()->GetEnemy(h);
+			C_Bullet* bullet = SCENE.GetNowScene()->GetPlayer()->GetBullet(i);
 			if (!bullet->IsShot())
 			{
 
@@ -130,19 +133,19 @@ void C_Hit::Enemy_BulletHit()
 void C_Hit::Enemy_PlayerHit()
 {
 
-	if (SCENE.GetPlayer()->GetAlive())
+	if (SCENE.GetNowScene()->GetPlayer()->GetAlive())
 	{
 
 		PlayerInvincibleTime--;
-		for (int i = 0; i < SCENE.GetEnemynum(); i++)
+		for (int i = 0; i < SCENE.GetNowScene()->GetEnemynum(); i++)
 		{
 		
 
 
 
 
-				C_Enemy* enemy = SCENE.GetEnemy(i);
-				C_Player* player = SCENE.GetPlayer();
+				C_Enemy* enemy = SCENE.GetNowScene()->GetEnemy(i);
+				C_Player* player = SCENE.GetNowScene()->GetPlayer();
 				Math::Vector2 enemyPos = enemy->GetPos();
 				Math::Vector2 playerPos = player->GetPos();
 				if (!enemy->GetAlive())
@@ -184,22 +187,22 @@ void C_Hit::Enemy_PlayerHit()
 
 void C_Hit::Turret_playerHit()
 {
-	if (SCENE.GetPlayer()->GetAlive())
+	if (SCENE.GetNowScene()->GetPlayer()->GetAlive())
 	{
 
 		PlayerInvincibleTime--;
-		for (int i = 0; i < SCENE.GetTurretNum(); i++)
+		for (int i = 0; i < SCENE.GetNowScene()->GetTurretNum(); i++)
 		{
 
 
-			for (int h = 0; h < SCENE.GetTurret(i)->GetBulletNum(); h++)
+			for (int h = 0; h <SCENE.GetNowScene()->GetTurret(i)->GetBulletNum(); h++)
 			{
 
 
 
 
-				C_Bullet* enemy = SCENE.GetTurret(i)->GetBullet(h);
-				C_Player* player = SCENE.GetPlayer();
+				C_Bullet* enemy = SCENE.GetNowScene()->GetTurret(i)->GetBullet(h);
+				C_Player* player = SCENE.GetNowScene()->GetPlayer();
 				Math::Vector2 enemyPos = enemy->GetPos();
 				Math::Vector2 playerPos = player->GetPos();
 				if (!enemy->IsShot())
@@ -239,13 +242,13 @@ void C_Hit::Turret_playerHit()
 }
 void C_Hit::Turret_BulletHit()
 {
-	for (int i = 0; i < SCENE.GetPlayer()->GetBulletNum(); i++)
+	for (int i = 0; i < SCENE.GetNowScene()->GetPlayer()->GetBulletNum(); i++)
 	{
 
-		for (int h = 0; h < SCENE.GetTurretNum(); h++)
+		for (int h = 0; h < SCENE.GetNowScene()->GetTurretNum(); h++)
 		{
-			EnemyTurret* enemy = SCENE.GetTurret(h);
-			C_Bullet* bullet = SCENE.GetPlayer()->GetBullet(i);
+			EnemyTurret* enemy = SCENE.GetNowScene()->GetTurret(h);
+			C_Bullet* bullet = SCENE.GetNowScene()->GetPlayer()->GetBullet(i);
 			if (!bullet->IsShot())
 			{
 
@@ -284,7 +287,7 @@ void C_Hit::Turret_BulletHit()
 
 Math::Vector2 C_Hit::DisCompare()
 {
-	C_Player* player = SCENE.GetPlayer();
+	C_Player* player = SCENE.GetNowScene()->GetPlayer();
 	Math::Vector2 playerPos = player->GetPos();
 	float  CloseDist = FLT_MAX;
 	
@@ -293,16 +296,16 @@ Math::Vector2 C_Hit::DisCompare()
 	Math::Vector2 enemypos = {0,0};
 
 	//===============================================
-	for (int i = 0;i < SCENE.GetEnemynum();i++)
+	for (int i = 0;i < SCENE.GetNowScene()->GetEnemynum();i++)
 	{
 
-	 enemypos = SCENE.GetEnemy(i)->GetPos();
+	 enemypos = SCENE.GetNowScene()->GetEnemy(i)->GetPos();
 	 CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}
-	for (int i = 0; i < SCENE.GetTurretNum(); i++)
+	for (int i = 0; i < SCENE.GetNowScene()->GetTurretNum(); i++)
 	{
-		enemypos = SCENE.GetTurret(i)->GetPos();
+		enemypos = SCENE.GetNowScene()->GetTurret(i)->GetPos();
 		CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}

@@ -12,13 +12,14 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Init(float	 circlesize) override;
+	void Damage(float _damage) override { HP -= _damage; if (HP < 0) { HP = 0; }}
 
 	void SetBulletTex(KdTexture *tex) { for (auto& i : bullet) { i.SetTexture(tex); } }
 
 	C_Bullet* GetBullet(int num) { return &bullet[num]; }
 	int GetBulletNum() { return BulletNum; }
-
+	void Reborn();
 
 private:
-
+	bool Death_CoolDown;
 };

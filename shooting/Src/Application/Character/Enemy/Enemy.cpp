@@ -2,7 +2,7 @@
 #include"../../Scene.h"
 #include"../../Character/Player/Player.h"
 #include"../Effect/Grass.h"
-
+#include"../../Scene/SceneBase.h"
 #include"../Skill/DamegeArea.h"
 C_Enemy::C_Enemy()
 {
@@ -11,6 +11,9 @@ C_Enemy::C_Enemy()
 		g = new Grass();
 		
 	}
+	d_a = new DamegeArea;
+	Init(100);
+
 }
 
 C_Enemy::~C_Enemy()
@@ -29,7 +32,7 @@ void C_Enemy::Update()
 	}
 	if (PlayerAlive)
 	{
-
+	pos += move;
 
 		if (HP <= 0)
 		{
@@ -40,11 +43,16 @@ void C_Enemy::Update()
 			{
 				g->Emit(pos);                                 
 			}
-			SCENE.GetPlayer()->SetKillCount(SCENE.GetPlayer()->GetKillCount() + 1);
+			if (!Death_CoolDown)
+			{
+			SCENE.GetNowScene()->GetPlayer()->SetKillCount(SCENE.GetNowScene()->GetPlayer()->GetKillCount() + 1);
+			Death_CoolDown = true;
+
+			}
 		}
 
-		pos += move;
-	}
+	}	
+
 	mat = Math::Matrix::CreateRotationZ(pictangle) *
 		Math::Matrix::CreateTranslation(pos.x-PlayerScroll.x, pos.y-PlayerScroll.y, 0);
 
@@ -78,50 +86,52 @@ void C_Enemy::Init(float circlesize)
 {
 	radius = circlesize;
 
-	pos = Math::Vector2(rand()%3200-1600, radius);
+	pos = Math::Vector2(rand()%3200-1600, 400);
 	move = { 0,0 };
 	movecount = { 0,0 };
 	posMax = { radius,radius };
 	angle = (float)(rand() % 360) * (3.141592f / 180.0f);
 	center = { 0.0f, 0.0f };
-	//movespeed = rand() %  5 + 1;
-	movespeed = 5;
-	speed = (float)(rand() % 19 + 1);
+	speed = rand() %  3 + 5;
+	//speed = 5;
 
+	Death_CoolDown = false;
 
-		d_a = new DamegeArea;
-		d_a->Init();
-	
 }
 
 void C_Enemy::Action()
 {
-	PlayerScroll = SCENE.GetPlayer()->GetScroll();
-	PlayerAlive = SCENE.GetPlayer()->GetAlive();
-	if (!alive||!PlayerAlive)
+	PlayerScroll = SCENE.GetNowScene()->GetPlayer()->GetScroll();
+	PlayerAlive = SCENE.GetNowScene()->GetPlayer()->GetAlive();
+	if (!alive || !PlayerAlive)
 	{
 		if (PlayerAlive)
 		{
-			if (rand()%5>3)
+			if (rand() % 5 > 3)
 			{
-			
-				
+
+
 
 				Reborn();
+				Death_CoolDown = false;
 			}
 		}
 		return;
 	}
-	pictangle = atan2f(
-		SCENE.GetPlayer()->GetPos().y - pos.y,
-		SCENE.GetPlayer()->GetPos().x - pos.x
-	);
-	pictangle -= ToRadians(90);
-
-	move = Math::Vector2(cosf(pictangle + ToRadians(90)) * speed, sinf(pictangle + ToRadians(90)) * speed);
+	if (alive)
+	{
 
 
-	
+		pictangle = atan2f(
+			SCENE.GetNowScene()->GetPlayer()->GetPos().y - pos.y,
+			SCENE.GetNowScene()->GetPlayer()->GetPos().x - pos.x
+		);
+		pictangle -= ToRadians(90);
+
+		move = Math::Vector2(cosf(pictangle + ToRadians(90)) * speed, sinf(pictangle + ToRadians(90)) * speed);
+
+
+	}
 }
 
 void C_Enemy::SetGrassTex(KdTexture* _tex)

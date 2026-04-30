@@ -1,6 +1,7 @@
 #include"DamegeArea.h"
 #include"../../Scene.h"
 #include"../Player/Player.h"
+#include".././../Scene/SceneBase.h"
 DamegeArea::DamegeArea()
 {
 }
@@ -25,7 +26,7 @@ void DamegeArea::Update()
 
 void DamegeArea::Draw()
 {
-	Math::Vector2 scroll = SCENE.GetPlayer()->GetScroll();
+	Math::Vector2 scroll = SCENE.GetNowScene()->GetPlayer()->GetScroll();
 	if (m_flg)
 	{
 

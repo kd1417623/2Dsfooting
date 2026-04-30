@@ -1,6 +1,8 @@
 #include"Grass.h"
 #include"../../Scene.h"
 #include"../Player/Player.h"
+
+#include"../../Scene/SceneBase.h"
 Grass::Grass()
 {
 }
@@ -16,7 +18,7 @@ void Grass::Init()
 }
 void Grass::Update(float movespeed)
 {
-    Math::Vector2 Scroll = SCENE.GetPlayer()->GetScroll();
+    Math::Vector2 Scroll = SCENE.GetNowScene()->GetPlayer()->GetScroll();
     cycle += Rnd() * 5;
 
     m_pos += m_move;

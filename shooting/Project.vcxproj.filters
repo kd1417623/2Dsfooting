@@ -61,6 +61,9 @@
     <Filter Include="Src\Application\Background">
       <UniqueIdentifier>{62fb09ba-630d-4444-ae32-f84e1818a986}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Scene">
+      <UniqueIdentifier>{620c5bfb-3772-43c9-9ca6-90784adb0ea8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Src\Application\Character\Skill">
       <UniqueIdentifier>{df6ec13c-7b67-477a-ad71-c55351df8716}</UniqueIdentifier>
     </Filter>
@@ -189,6 +192,24 @@
     <ClInclude Include="Src\Application\Character\Skill\DamegeArea.h">
       <Filter>Src\Application\Character\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Scene\SceneBase.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\TitleScene.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\GameScene.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\ResultScene.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\SceneChenge.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Character\Player\UI.h">
+      <Filter>Src\Application\Character\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -257,9 +278,6 @@
     <ClCompile Include="Src\Application\Character\Player\Player.cpp">
       <Filter>Src\Application\Character\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Character\CharacterBase.cpp">
-      <Filter>Src\Application\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Character\Enemy\Enemy.cpp">
       <Filter>Src\Application\Character\Enemy</Filter>
     </ClCompile>
@@ -283,6 +301,27 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Character\Skill\DamegeArea.cpp">
       <Filter>Src\Application\Character\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\SceneBase.cpp">
+      <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\TitleScene.cpp">
+      <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\GameScene.cpp">
+      <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\ResultScene.cpp">
+      <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\SceneChenge.cpp">
+      <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Character\Player\UI.cpp">
+      <Filter>Src\Application\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Character\CharacterBase.cpp">
+      <Filter>Src\Application\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

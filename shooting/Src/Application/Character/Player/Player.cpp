@@ -2,21 +2,20 @@
 #include"../../Scene.h"
 #include"../Hit/Hit.h"
 #include "../Skill/Bullet.h"
+#include"../../Scene/SceneBase.h"
 C_Player::C_Player()
 {
 	for (auto& bullet : m_bullet)
 	{
-		bullet = new C_Bullet();
+		bullet = std::make_shared<C_Bullet>();
 	}
 	angle = 0.0f;
 	center = { 0.0f, 0.0f };
+	pos = { 0,0 };
+	scroll = { 0,0 };
 }
 C_Player::~C_Player()
 {
-	for (auto& bullet : m_bullet)
-	{
-		delete bullet;
-	}
 }
 
 void C_Player::Update()
@@ -35,15 +34,17 @@ void C_Player::Update()
 	
 	if (AutoShot)
 	{
+		
 		mouseangle = atan2f(
-			SCENE.GetHit()->DisCompare().y - pos.y ,
-			SCENE.GetHit()->DisCompare().x - pos.x 
+			SCENE.GetNowScene()->GetHit()->DisCompare().y - pos.y ,
+			SCENE.GetNowScene()->GetHit()->DisCompare().x - pos.x
 		);
 
 
 	}
 	else
 	{
+		
 		mouseangle = atan2f(
 			SCENE.getMousePos().y - pos.y + scroll.y,
 			SCENE.getMousePos().x - pos.x + scroll.x
@@ -54,7 +55,6 @@ void C_Player::Update()
 	mouseangle -= ToRadians(90);
 
 	mat = Math::Matrix::CreateRotationZ(mouseangle) *
-		//Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
 		Math::Matrix::CreateTranslation(pos.x- scroll.x, pos.y - scroll.y, 0);
 	playeranimX+=0.5;
 }
@@ -80,7 +80,7 @@ void C_Player::Init(float	 circlesize)
 {
 	radius = circlesize;
 
-	pos = Math::Vector2(0, radius);
+	pos = Math::Vector2(0, 0);
 	move = { 0,0 };
 	movecount = { 0,0 };
 	posMax = { radius,radius };
@@ -104,10 +104,10 @@ void C_Player::Init(float	 circlesize)
 
 void C_Player::Action()
 {
-	if (!alive)
+	if (alive)
 	{
-		return;
-	}
+	
+	
 	//èâä˙àƒ==============================
 	//if (GetAsyncKeyState('A') & 0x8000)
 	//{
@@ -182,7 +182,7 @@ void C_Player::Action()
 				OverHeatflg = false;
 
 			}
-		}
+		}}
 		
 	}
 
@@ -214,12 +214,19 @@ void C_Player::Action()
 
 	if (GetAsyncKeyState('Q')&0x8000)
 	{
-		AutoShot = true;
+		if (!ShotKeyFlg)
+		{
+		AutoShot= ! AutoShot;
+		ShotKeyFlg = true;
+
+		}
+	
 
 	}
 	else
 	{
-		AutoShot = false;
+		ShotKeyFlg = false;
+
 	}
 
 
@@ -256,5 +263,5 @@ void C_Player::BulletSetTex(KdTexture* tex)
 
 C_Bullet* C_Player::GetBullet(int num)
 {
-	return m_bullet[num];
+	return m_bullet[num].get();
 }

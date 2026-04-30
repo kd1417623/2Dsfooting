@@ -5,7 +5,7 @@ class C_Player:public C_Character
 {
 public:
 	static const int BulletNum = 50;
-	C_Bullet *m_bullet[BulletNum];
+	std::shared_ptr	<C_Bullet >m_bullet[BulletNum];
 	C_Bullet* GetBullet(int num);
 	C_Player();
 	~C_Player();
@@ -55,4 +55,6 @@ private:
 
 	bool AutoShot = false;
 	float CloseEnemyAngle = 0;
+
+	bool ShotKeyFlg=false;
 };

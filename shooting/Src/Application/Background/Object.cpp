@@ -1,36 +1,19 @@
 #include"Object.h"
 #include"../Scene.h"
 #include"../Character/Player/Player.h"
+
+#include"../Scene/SceneBase.h"
 void C_Object::Update()
 {
-	m_playermove = SCENE.GetPlayer()->GetMove();
+	auto p = SCENE.GetNowScene()->GetPlayer();
+	if (p) {
+		m_playermove = p->GetMove();
+	}
+	else {
+	}
+
 	m_pos -= m_playermove;
-	//if (m_pos.x>640+m_size.x||m_pos.y<-320-m_size.x||m_pos.x<-640-m_size.x||m_pos.y>320+m_size.x)
-	//{
-	//	switch (rand()%4+1)
-	//	{
-	//	case 1:
-	//		m_pos.x =  (rand() % 1240 - 620);
-	//		m_pos.y = 310+m_size.x;
 
-	//		break;
-	//	case 2:
-	//		m_pos.y =  (rand() % 700 - 350);
-	//		m_pos.x = 620+m_size.x;
-
-	//		break;
-	//	case 3:
-	//		m_pos.y = (rand() % 700 - 350);
-	//		m_pos.x = -620-m_size.x;
-	//		break;
-	//	case 4:
-	//		m_pos.x = (rand() % 1240 - 620);
-	//		m_pos.y = 300+m_size.x;
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
 
 	if (m_pos.x > 640 + m_size.x)
 	{
@@ -86,7 +69,8 @@ void C_Object::Draw(Math::Vector2 size)
 
 void C_Object::Init()
 {
-	//m_scale = 1;
-	//m_pos = { 999,999 };
+	
+	
+
 
 }
