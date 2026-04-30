@@ -16,8 +16,11 @@ GameScene::GameScene()
 	HpBarTex   .Load("Texture/HpBar.png");
 	HpTex      .Load("Texture/HpText.png");
 
+	NumDecoTex.Load("Texture/Number5.png");
 
-	NumberTex.Load("Texture/Number.png");
+	NumberTex.Load("Texture/Number4.png");
+
+	m_ui->SetScoreDecoTex(&NumDecoTex);
 
 	m_ui->SetNumTex(&NumberTex);
 	CountDounRect = { 0,0,220,160 };
@@ -177,11 +180,16 @@ void GameScene::CountDounDraw()
 	Math::Color color = { 0,1,1,1 };
 	SHADER.m_spriteShader.SetMatrix(CountDounMat);
 	SHADER.m_spriteShader.C_DrawTex(&NumberTex, CountDounRect, color);
+	D3D.SetBlendState(BlendMode::Add);
+	SHADER.m_spriteShader.SetMatrix(NumDecoMat);
+	SHADER.m_spriteShader.C_DrawTex(&NumDecoTex, Math::Rectangle {0,0,155,126}, color);
+	D3D.SetBlendState(BlendMode::Alpha);
 }
 
 void GameScene::CountDounUpdate()
 {
-	CountDounMat = Math::Matrix::CreateTranslation(0, 0, 0);
+	NumDecoMat = Math::Matrix::CreateScale(1) ;
+	CountDounMat = Math::Matrix::CreateScale(3) * Math::Matrix::CreateTranslation(0, 0, 0);
 //	CountDounRect = { 0,(int)CountDounPictAnim,220,160 };
 ////	CountDounPictAnim--;
 //	if (count<=120)
@@ -199,11 +207,11 @@ void GameScene::CountDounUpdate()
 
 	int number = count / 60; 
 
-	CountDounRect = { 0, (int)CountDounPictAnim, 220, 160 };
+	CountDounRect = { 0, (int)CountDounPictAnim, 30, 30 };
 
 	if (CountDounPictAnim> number * NumberOneSec ||(count<=0&&CountDounPictAnim>-NumberOneSec))
 	{
-		CountDounPictAnim -= 10;
+		CountDounPictAnim -= 3;
 	}
 }
 

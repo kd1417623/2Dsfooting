@@ -43,8 +43,12 @@ private:
 
 
 	float CountDounPictAnim;
-	const float NumberOneSec = 160;
+	const float NumberOneSec = 30;
 
 	int Score = 0;
+
+
+	KdTexture NumDecoTex;
+	Math::Matrix NumDecoMat;
 
 };

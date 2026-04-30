@@ -36,6 +36,7 @@ void UI::Update()
 	HpBarMaxMat = Math::Matrix::CreateScale(3) * Math::Matrix::CreateTranslation(-400, 320, 0);
 }
 
+
 void UI::ScoreDraw()
 {
 	D3D.SetBlendState(BlendMode::Add);
@@ -45,9 +46,13 @@ void UI::ScoreDraw()
 
 
 		SHADER.m_spriteShader.SetMatrix(ScoreMat[i]);
-		SHADER.m_spriteShader.DrawTex(NumerTex, Math::Rectangle{ 0,(int)ScoreRectY[i],220, 160 }, 1.0f);
+		SHADER.m_spriteShader.DrawTex(NumerTex, Math::Rectangle{ 0,(int)ScoreRectY[i],30, 30 }, 1.0f);
 	}
+	SHADER.m_spriteShader.SetMatrix(NumDecoMat[0]);
+	SHADER.m_spriteShader.DrawTex(NumDecoTex, Math::Rectangle{ 0,0,50,126 }, 1.0f);
 
+	SHADER.m_spriteShader.SetMatrix(NumDecoMat[1]);
+	SHADER.m_spriteShader.DrawTex(NumDecoTex, Math::Rectangle{ 100,0,50,126 }, 1.0f);
 	D3D.SetBlendState(BlendMode::Alpha);
 
 }
@@ -58,7 +63,7 @@ void UI::ScoreUpdate()
 	SCENE.CalcScoreNum(SCENE.GetScore());
 	for (int i = 0; i < ScoreNumMax; i++)
 	{
-		 ScoreRectYGall[i] = (SCENE.GetScoreNum(i) * 160)+160;
+		 ScoreRectYGall[i] = (SCENE.GetScoreNum(i) * 30)+30;
 
 	}
 	for (int i = 0; i < ScoreNumMax; i++)
@@ -66,7 +71,7 @@ void UI::ScoreUpdate()
 		if (ScoreRectY[i]<ScoreRectYGall[i])
 		{
 
-			ScoreRectY[i] += 10;
+			ScoreRectY[i] += 3;
 		
 		}
 		else if (ScoreRectY[i] > ScoreRectYGall[i])
@@ -75,7 +80,11 @@ void UI::ScoreUpdate()
 
 		}
 	
-		ScoreMat[i] = Math::Matrix::CreateScale(0.3) * Math::Matrix::CreateTranslation(600 - (i * 50), -300, 0);
+		ScoreMat[i] = Math::Matrix::CreateScale(2) * Math::Matrix::CreateTranslation(600 - (i * 40), -300, 0);
+
+		NumDecoMat[0] = Math::Matrix::CreateScale(1) * Math::Matrix::CreateTranslation(640 - (ScoreNumMax * 40), -300, 0);
+		NumDecoMat[1] = Math::Matrix::CreateScale(1) * Math::Matrix::CreateTranslation(610, -300, 0);
+
 
 	}
 }

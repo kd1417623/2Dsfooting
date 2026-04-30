@@ -19,6 +19,8 @@ public:
 	void ScoreUpdate();
 	void SetNumTex(KdTexture* _tex) { NumerTex = _tex; }
 
+
+	void SetScoreDecoTex(KdTexture* _tex) { NumDecoTex = _tex; }
 private:
 	KdTexture* HpBarTex;
 	KdTexture* HpBarMaxTex;
@@ -39,6 +41,9 @@ private:
 	Math::Matrix ScoreMat[ScoreNumMax];
 
 	float ScoreRectY[ScoreNumMax] = { {} };
+
+	Math::Matrix NumDecoMat[2];
+	KdTexture* NumDecoTex;
 
 
 };
