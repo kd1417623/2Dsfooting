@@ -16,7 +16,10 @@ public:
 
 
 	void CountDounDraw();
-	void CountDounUpdate();
+	void CountDounUpdate(); 
+
+	int GetScore() { return Score; }
+	
 
 private:
 	std::shared_ptr<UI> m_ui;
@@ -41,4 +44,7 @@ private:
 
 	float CountDounPictAnim;
 	const float NumberOneSec = 160;
+
+	int Score = 0;
+
 };

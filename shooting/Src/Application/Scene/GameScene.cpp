@@ -17,7 +17,9 @@ GameScene::GameScene()
 	HpTex      .Load("Texture/HpText.png");
 
 
-	NumberTex.Load("Texture/Number2.png");
+	NumberTex.Load("Texture/Number.png");
+
+	m_ui->SetNumTex(&NumberTex);
 	CountDounRect = { 0,0,220,160 };
 	m_ui->SetHptex(&HpBarTex, &HpTex, &HpBarMaxTex);
 	count = countMax;
@@ -105,6 +107,7 @@ void GameScene::Update()
 		SCENE.ChengeScene(result);
 		return;
 	}
+	m_ui->ScoreUpdate();
 }
 
 void GameScene::PreUpdate()
@@ -129,6 +132,8 @@ void GameScene::PreUpdate()
 	player->Update();
 
 	CountDounUpdate();
+
+
 
 }
 
@@ -162,15 +167,16 @@ void GameScene::Draw()
 			m_ui->Draw();
 
 
-		
+			m_ui->ScoreDraw();
 
 
 }
 
 void GameScene::CountDounDraw()
 {
+	Math::Color color = { 0,1,1,1 };
 	SHADER.m_spriteShader.SetMatrix(CountDounMat);
-	SHADER.m_spriteShader.DrawTex(&NumberTex, CountDounRect, 1.0f);
+	SHADER.m_spriteShader.C_DrawTex(&NumberTex, CountDounRect, color);
 }
 
 void GameScene::CountDounUpdate()
@@ -193,10 +199,11 @@ void GameScene::CountDounUpdate()
 
 	int number = count / 60; 
 
-	CountDounRect = { 0, (int)CountDounPictAnim, 220, 170 };
+	CountDounRect = { 0, (int)CountDounPictAnim, 220, 160 };
 
 	if (CountDounPictAnim> number * NumberOneSec ||(count<=0&&CountDounPictAnim>-NumberOneSec))
 	{
-		CountDounPictAnim -= 5;
+		CountDounPictAnim -= 10;
 	}
 }
+

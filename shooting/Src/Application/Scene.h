@@ -13,8 +13,13 @@ private:
 	static const int WindowWIDTH = 1280;
 	static const int WindowHEIGHT = 720;
 
-	
+	int Score = 0;
+	static const int ScoreNumMax = 10;
+	int ScoreNumber[ScoreNumMax] = { {} };
+
 	float Killcount = 0;
+
+
 
 	GameFase nowFase;
 
@@ -38,6 +43,8 @@ public:
 	// GUIèàóù
 	void ImGuiUpdate(); 
 
+
+
 	SceneBase* GetNowScene() { return m_nowScene.get(); }
 
 	POINT getMousePos();
@@ -49,6 +56,23 @@ public:
 	int GetKillCount() { return KillCount; }
 
 	void ChengeScene(GameFase NextFase);
+
+
+	void SetScore(int score) { Score = score; }
+	int GetScore() { return Score; }
+
+	void CalcScoreNum(int score) {
+		for (int i = 0; i < ScoreNumMax; i++)
+		{
+			ScoreNumber[i] = score % 10;
+			score /= 10;
+		}
+	}
+	int GetScoreNum(int num) { return ScoreNumber[num]; }
+
+	static const int GetScoreNumMax() { return ScoreNumMax; }
+
+
 private:
 
 	Scene() {}

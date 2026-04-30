@@ -17,7 +17,7 @@ public:
 
 	void ScoreDraw();
 	void ScoreUpdate();
-
+	void SetNumTex(KdTexture* _tex) { NumerTex = _tex; }
 
 private:
 	KdTexture* HpBarTex;
@@ -34,9 +34,11 @@ private:
 	float PlayerHp;
 
 
-
+	static const int ScoreNumMax = 10;
 	KdTexture* NumerTex;
-	Math::Matrix ScoreMat;
+	Math::Matrix ScoreMat[ScoreNumMax];
+
+	float ScoreRectY[ScoreNumMax] = { {} };
 
 
 };

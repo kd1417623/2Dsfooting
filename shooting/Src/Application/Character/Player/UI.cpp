@@ -38,9 +38,45 @@ void UI::Update()
 
 void UI::ScoreDraw()
 {
+	D3D.SetBlendState(BlendMode::Add);
+
+	for (int i = 0; i < ScoreNumMax; i++)
+	{
+
+
+		SHADER.m_spriteShader.SetMatrix(ScoreMat[i]);
+		SHADER.m_spriteShader.DrawTex(NumerTex, Math::Rectangle{ 0,(int)ScoreRectY[i],220, 160 }, 1.0f);
+	}
+
+	D3D.SetBlendState(BlendMode::Alpha);
+
 }
 
 void UI::ScoreUpdate()
 {
+	int ScoreRectYGall[ScoreNumMax];
+	SCENE.CalcScoreNum(SCENE.GetScore());
+	for (int i = 0; i < ScoreNumMax; i++)
+	{
+		 ScoreRectYGall[i] = (SCENE.GetScoreNum(i) * 160)+160;
+
+	}
+	for (int i = 0; i < ScoreNumMax; i++)
+	{
+		if (ScoreRectY[i]<ScoreRectYGall[i])
+		{
+
+			ScoreRectY[i] += 10;
+		
+		}
+		else if (ScoreRectY[i] > ScoreRectYGall[i])
+		{
+			ScoreRectY[i] = 0;
+
+		}
+	
+		ScoreMat[i] = Math::Matrix::CreateScale(0.3) * Math::Matrix::CreateTranslation(600 - (i * 50), -300, 0);
+
+	}
 }
 

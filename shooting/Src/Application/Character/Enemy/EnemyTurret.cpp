@@ -36,6 +36,7 @@ void EnemyTurret::Update() {
 		if (!Death_CoolDown)
 		{
 			SCENE.GetNowScene()->GetPlayer()->SetKillCount(SCENE.GetNowScene()->GetPlayer()->GetKillCount() + 1);
+			SCENE.SetScore(SCENE.GetScore() + 100);
 			Death_CoolDown = true;
 
 		}
