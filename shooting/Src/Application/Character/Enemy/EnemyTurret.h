@@ -1,11 +1,15 @@
 #pragma once
 #include"../CharacterBase.h"
 #include"../Skill/Bullet.h"
+class Grass;
+
 class EnemyTurret : public C_Character
 {
 public:
 	static const int BulletNum = 20;
 	C_Bullet bullet[BulletNum];
+	static const int GrassNum = 20;
+	std::shared_ptr<Grass> grass[GrassNum];
 	EnemyTurret();
 	~EnemyTurret();
 
@@ -20,6 +24,10 @@ public:
 	int GetBulletNum() { return BulletNum; }
 	void Reborn();
 
+
+	void GrassSetTex(KdTexture* _tex);
 private:
 	bool Death_CoolDown;
+
+	Math::Vector2 AimVec;
 };

@@ -20,9 +20,12 @@ public:
 
 	int GetScore() { return Score; }
 	
+	void ImGuiUpdate() override;
+
+
 
 private:
-	std::shared_ptr<UI> m_ui;
+
 
 	KdTexture HpTex, HpBarTex, HpBarMaxTex;
 
@@ -40,7 +43,7 @@ private:
 
 	Math::Rectangle CountDounRect;
 
-
+	bool gameStart = false;
 
 	float CountDounPictAnim;
 	const float NumberOneSec = 30;
@@ -50,5 +53,22 @@ private:
 
 	KdTexture NumDecoTex;
 	Math::Matrix NumDecoMat;
+
+
+
+	KdTexture bossTex;
+	KdTexture LaserTex;
+
+	KdTexture bossgalasstex;
+
+	KdTexture barnerTex;
+
+	KdTexture ComboTextTex;
+
+
+
+	bool debugInvincible = false;
+	bool DebugInvincibleKeyFlg = false;
+
 
 };

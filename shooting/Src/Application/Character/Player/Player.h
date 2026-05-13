@@ -30,6 +30,7 @@ public:
 	float GetKillCount() { return KillCount; }
 	Math::Vector2 GetScroll() { return scroll; }
 
+
 private:
 	Math::Vector2 movecount{};
 	Math::Vector2 posMax{};
@@ -57,4 +58,10 @@ private:
 	float CloseEnemyAngle = 0;
 
 	bool ShotKeyFlg=false;
+
+
+	Math::Vector2 AimVec;
+
+	//KdTexture* barnerTex;
+	//Math::Matrix barnerMat;
 };

@@ -7,11 +7,10 @@
 #include"../Background/Object.h"
 #include"../Character/Player/UI.h"
 #include "../Scene.h"
-
+#include"../Character/Enemy/Boss.h"
 GameScene::GameScene()
 {
 	AllNew();
-	m_ui = std::make_shared<UI>();
 	HpBarMaxTex.Load("Texture/HpMaxBar.png");
 	HpBarTex   .Load("Texture/HpBar.png");
 	HpTex      .Load("Texture/HpText.png");
@@ -20,7 +19,26 @@ GameScene::GameScene()
 
 	NumberTex.Load("Texture/Number4.png");
 
+	bossgalasstex.Load("Texture/Grass3.png");
+	bossTex.Load("Texture/Boss.png");
+	LaserTex.Load("Texture/laser.png");
+	barnerTex.Load("Texture/Exhaust-0001.png");
+
+
+	ComboTextTex.Load("Texture/ComboText2.png");
+//	player->SebBarnerTex(&barnerTex);
+
+	boss = std::make_shared<C_BOSS>(); 
+
+	boss->setlasertex(&LaserTex);
+	boss->SetTex(&bossTex);
+	boss->setgallastex(&bossgalasstex);
+	boss->Init(0);
+
 	m_ui->SetScoreDecoTex(&NumDecoTex);
+
+	m_ui->SetComboTextTex(&ComboTextTex);
+	
 
 	m_ui->SetNumTex(&NumberTex);
 	CountDounRect = { 0,0,220,160 };
@@ -32,6 +50,12 @@ GameScene::GameScene()
 	CountDounPictAnim = NumberOneSec*4;
 	AllInit();
 	PreUpdate();
+
+
+	SCENE.SetClearFlag(false);
+	SCENE.SetScore(0);
+	SCENE.SetKillcount(0);
+	SCENE.SetMaxCombo(0);
 }
 
 GameScene::~GameScene()
@@ -48,31 +72,90 @@ GameScene::~GameScene()
 void GameScene::Update()
 {
 	if (!IsCountDown)
-
 	{
-
-		for (auto& i : enemy)
-		{
-			i->Action();
+		
 
 
-		}
-		player->Action();
-
-		hit->Enemy_EnemyHit();
-		hit->Enemy_BulletHit();
-		hit->Turret_playerHit();
-		hit->Enemy_PlayerHit();
-		hit->Turret_BulletHit();
-		for (auto& i : enemy)
-		{
-			i->Update();
+			player->Action();
+			if (!gameStart)
+			{
+				if (GetAsyncKeyState(VK_RBUTTON))
+				{
 
 
-		}
-		for (auto& t : m_turret)
-		{
-			t->Update();
+					gameStart = true;
+				}
+			}
+			else
+			{
+			if (BossBattleStart)
+			{
+				boss->Update();
+				hit->Boss_BulletHit();
+				if (GetAsyncKeyState(VK_RETURN)&0x8000)
+				{
+					boss->Damage(boss->GetHp());
+				}
+
+			}
+
+			for (auto& i : enemy)
+			{
+				i->Action();
+
+
+			}
+
+
+			if (GetAsyncKeyState('E')&0x8000)
+			{
+				if (!DebugInvincibleKeyFlg)
+				{
+					debugInvincible = !debugInvincible;
+					DebugInvincibleKeyFlg = true;
+				}
+			}
+			else
+			{
+				DebugInvincibleKeyFlg = false;
+			}
+			if (!debugInvincible)
+			{
+			hit->Turret_playerHit();
+			hit->Enemy_PlayerHit();
+
+
+			}
+			
+			hit->Enemy_BulletHit();
+
+			hit->Enemy_EnemyHit();
+			hit->Turret_BulletHit();
+
+
+
+			for (auto& i : enemy)
+			{
+				i->Update();
+
+
+			}
+			for (auto& t : m_turret)
+			{
+				t->Update();
+			}
+			if (SCENE.GetScore() > 200000 && !BossBattleStart)
+			{
+				BossBattleStart = true;
+				AllEnemy_Kills();
+			}
+			else
+			{
+				if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
+				{
+					SCENE.SetScore(200000);
+				}
+			}
 		}
 	}
 	else
@@ -104,13 +187,18 @@ void GameScene::Update()
 	
 
 	
-	if (!player->GetAlive())
+	if (!player->GetAlive()||SCENE.GetClearFlag())
 	{
 		SCENE.SetKillcount(player->GetKillCount());
+		if (SCENE.GetClearFlag())
+		{
+			SCENE.SetScore(SCENE.GetScore() * 2);
+		}
 		SCENE.ChengeScene(result);
 		return;
 	}
 	m_ui->ScoreUpdate();
+	
 }
 
 void GameScene::PreUpdate()
@@ -148,13 +236,11 @@ void GameScene::Init()
 void GameScene::Draw()
 {
 	background->Draw();
-	CountDounDraw();
 
 		backobj[0]->Draw({ 288,192 });
 		backobj[1]->Draw({ 320,320 });
-		player->Draw();
 		
-
+		boss->Draw();
 
 
 			for (auto& i : enemy)
@@ -167,16 +253,23 @@ void GameScene::Draw()
 				i->Draw();
 			}
 
+			player->Draw();
+
 			m_ui->Draw();
 
 
 			m_ui->ScoreDraw();
 
+			CountDounDraw();
+
+			m_ui->DrawCursor();
 
 }
 
 void GameScene::CountDounDraw()
 {
+	D3D.SetBlendState(BlendMode::Add);
+
 	Math::Color color = { 0,1,1,1 };
 	SHADER.m_spriteShader.SetMatrix(CountDounMat);
 	SHADER.m_spriteShader.C_DrawTex(&NumberTex, CountDounRect, color);
@@ -207,11 +300,17 @@ void GameScene::CountDounUpdate()
 
 	int number = count / 60; 
 
+
 	CountDounRect = { 0, (int)CountDounPictAnim, 30, 30 };
 
 	if (CountDounPictAnim> number * NumberOneSec ||(count<=0&&CountDounPictAnim>-NumberOneSec))
 	{
 		CountDounPictAnim -= 3;
 	}
+}
+
+void GameScene::ImGuiUpdate()
+{
+	boss->ImGUIUpdate();
 }
 

@@ -13,8 +13,11 @@ public:
 	void Turret_BulletHit();
 
 
+	void Boss_BulletHit();
+
 
 	Math::Vector2 DisCompare();//プレイヤーに近い方の座標を返す
+
 
 
 private:

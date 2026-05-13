@@ -5,7 +5,8 @@ class C_Enemy;
 class C_Hit;
 class C_Object;
 class EnemyTurret;
-
+class C_BOSS;
+class UI;
 class SceneBase
 {
 public:
@@ -37,7 +38,17 @@ public:
 
 	C_Hit* GetHit() { return hit.get(); }
 
+
+
+	C_BOSS* GetBoss() { return boss.get(); }
+
+
+
+	bool GetBossBattle() { return BossBattleStart; }
 	void AllInit();
+
+
+	virtual void ImGuiUpdate() {};
 protected:
 
 	static const int EnemyNum = 10;
@@ -45,6 +56,7 @@ protected:
 
 
 	std::shared_ptr<C_Player> player;
+	std::shared_ptr<C_BOSS> boss;
 
 	std::shared_ptr<C_Enemy>enemy[EnemyNum];
 	std::shared_ptr<C_Hit> hit;
@@ -69,9 +81,11 @@ protected:
 
 	KdTexture TurretTex;
 
+	std::shared_ptr<UI> m_ui;
 
 
-
+	KdTexture CursorTex;
+	bool BossBattleStart = false;
 
 };
 

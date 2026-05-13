@@ -13,6 +13,8 @@ private:
 	static const int WindowWIDTH = 1280;
 	static const int WindowHEIGHT = 720;
 
+	bool ClearFlag = false;
+
 	int Score = 0;
 	static const int ScoreNumMax = 10;
 	int ScoreNumber[ScoreNumMax] = { {} };
@@ -20,6 +22,16 @@ private:
 	float Killcount = 0;
 
 
+	const float ComboTimeMax = 120.0f;
+
+	float ComboTime = ComboTimeMax;
+	bool ComboFlag = false;
+	float Combocount = 0;
+	
+	float ComboMax = 0;
+
+
+	float ComboNum[3] = { {} };
 
 	GameFase nowFase;
 
@@ -70,9 +82,69 @@ public:
 	}
 	int GetScoreNum(int num) { return ScoreNumber[num]; }
 
+
+
+
+	void SetMaxCombo(float combo) { ComboMax = combo; }
+	float GetMaxCombo() { return ComboMax; }
 	static const int GetScoreNumMax() { return ScoreNumMax; }
 
 
+
+	void SetComboTime(float time) { ComboTime = time; }
+	float GetComboTime() { return ComboTime; }
+	float GetComboTimeMax() { return ComboTimeMax; }
+
+	bool GetComboFlag() { return ComboFlag; }
+
+
+	void ComboUpdate() {
+		CalcComboNum(Combocount);
+		if (ComboTime <= 0)
+		{
+			ComboFlag = false;
+			if (Combocount > ComboMax)
+			{
+				ComboMax = Combocount;
+
+			}
+			Combocount = 0;
+		}
+		else
+		{
+			ComboFlag = true;
+			ComboTime--;
+		}
+	}
+	void ComboReset() {
+		ComboTime = ComboTimeMax;
+		Combocount++;
+
+	}
+
+	float GetComboCount() { return Combocount; }
+
+
+	void CalcComboNum(int combo) {
+		for (int i = 0; i < 3; i++)
+		{
+			ComboNum[i] = combo % 10;
+			combo /= 10;
+		}
+	}
+	float GetComboNum(int num) { 
+	return ComboNum[num]; }
+
+
+
+
+	int GetWindowWIDTH() { return WindowWIDTH; }
+	int GetWindowHEIGHT() { return WindowHEIGHT; }
+
+
+
+	void SetClearFlag(bool flag) { ClearFlag = flag; }
+	bool GetClearFlag() { return ClearFlag; }
 private:
 
 	Scene() {}

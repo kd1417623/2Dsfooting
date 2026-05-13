@@ -34,29 +34,34 @@ void C_Player::Update()
 	
 	if (AutoShot)
 	{
-		
+		AimVec = { SCENE.GetNowScene()->GetHit()->DisCompare() - pos  };
 		mouseangle = atan2f(
-			SCENE.GetNowScene()->GetHit()->DisCompare().y - pos.y ,
-			SCENE.GetNowScene()->GetHit()->DisCompare().x - pos.x
+			AimVec.y,
+			AimVec.x
 		);
 
 
 	}
 	else
 	{
-		
+		AimVec = { SCENE.getMousePos().x - pos.x, SCENE.getMousePos().y - pos.y };
 		mouseangle = atan2f(
-			SCENE.getMousePos().y - pos.y + scroll.y,
-			SCENE.getMousePos().x - pos.x + scroll.x
+			AimVec.y + scroll.y,
+			AimVec.x + scroll.x
 		);
 
 
 	}
 	mouseangle -= ToRadians(90);
-
-	mat = Math::Matrix::CreateRotationZ(mouseangle) *
+	Math::Vector2 BarnerVec = AimVec;
+	BarnerVec.Normalize();
+	BarnerVec *= 50;
+	mat = 		Math::Matrix::CreateScale(1.5f, 1.5f, 1.0f) *Math::Matrix::CreateRotationZ(mouseangle) *
+		
 		Math::Matrix::CreateTranslation(pos.x- scroll.x, pos.y - scroll.y, 0);
-	playeranimX+=0.5;
+
+
+	
 }
 
 
@@ -67,7 +72,9 @@ void C_Player::Draw()
 		return;
 	}
 	SHADER.m_spriteShader.SetMatrix(mat);
-	SHADER.m_spriteShader.C_DrawTex(tex, Math::Rectangle{(int)playeranimX*64,0,64,64 }, m_color);
+	SHADER.m_spriteShader.C_DrawTex(tex, Math::Rectangle{(int)playeranimX*64,0,71,76 }, m_color);
+
+
 	for(auto& bullet : m_bullet)
 	{
 		bullet->Draw(false);
@@ -85,9 +92,11 @@ void C_Player::Init(float	 circlesize)
 	movecount = { 0,0 };
 	posMax = { radius,radius };
 
+	AimVec = { SCENE.getMousePos().x - pos.x,
+		SCENE.getMousePos().y - pos.y };
 	 mouseangle = atan2f(
-		SCENE.getMousePos().y - pos.y,
-		SCENE.getMousePos().x - pos.x
+		AimVec.y,
+		AimVec.x
 	);
 	mouseangle -= ToRadians(90);
 	mat = Math::Matrix::CreateRotationZ(mouseangle) *
@@ -167,7 +176,19 @@ void C_Player::Action()
 
 			for (auto& i : m_bullet)
 			{
-				if (!i->Shot(pos, Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
+				Math::Vector2 ShotDir;
+				if (AutoShot)
+				{
+					ShotDir = AimVec;
+
+				}
+				else
+				{
+					ShotDir = AimVec + scroll;
+
+				}
+				ShotDir.Normalize();
+				if (!i->Shot(pos, ShotDir * 20))
 				{
 					break;
 				}
@@ -184,21 +205,6 @@ void C_Player::Action()
 			}
 		}}
 		
-	}
-
- else if (GetAsyncKeyState(VK_RBUTTON)&0x8000)
-	{
-		for (auto& i : m_bullet)
-		{
-			if (!i->Shot(pos+ Math::Vector2(cosf(mouseangle + ToRadians(90)) * 50, sinf(mouseangle + ToRadians(90)) * 50)-scroll, Math::Vector2(cosf(mouseangle + ToRadians(90)) * 30, sinf(mouseangle + ToRadians(90)) * 30)))
-			{				
-				i->SetFreeze(true);
-
-				break;
-			}
-
-
-		}
 	}
 	else
 	{

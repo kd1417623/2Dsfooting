@@ -4,6 +4,7 @@
 #include"../../Scene/SceneBase.h"
 C_Bullet::C_Bullet()
 {
+//	IsShot = false;
 }
 
 C_Bullet::~C_Bullet()

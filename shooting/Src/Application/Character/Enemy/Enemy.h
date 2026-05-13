@@ -20,15 +20,7 @@ public:
 
 
 
-	void Reborn() {
-		HP = maxHP;
-		color = { 1,1,1,1 };
-		//PlayerAlive = true;
-		moveswitch = false;
-		movecount = { 0,0 };
-		alive = true;
-		pos = Math::Vector2(rand() % 3200 - 1600, 400)+PlayerScroll;
-	}
+	void Reborn();
 	void Death() override {
 		alive = false;
 		color = { 1,1,1,0 };

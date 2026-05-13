@@ -9,7 +9,7 @@ C_Enemy::C_Enemy()
 	for (auto& g : grass)
 	{
 		g = new Grass();
-		
+
 	}
 	d_a = new DamegeArea;
 	Init(100);
@@ -32,45 +32,49 @@ void C_Enemy::Update()
 	}
 	if (PlayerAlive)
 	{
-	pos += move;
+		pos += move;
 
-		if (HP <= 0)
+		if (HP <= 0&&alive)
 		{
 			d_a->Smit(pos, 1, 50);
 
 			alive = false;
 			for (auto& g : grass)
 			{
-				g->Emit(pos);                                 
+				g->Emit(pos);
 			}
 			if (!Death_CoolDown)
 			{
-			SCENE.GetNowScene()->GetPlayer()->SetKillCount(SCENE.GetNowScene()->GetPlayer()->GetKillCount() + 1);
-			SCENE.SetScore(SCENE.GetScore() + 100);
-			Death_CoolDown = true;
+				SCENE.GetNowScene()->GetPlayer()->SetKillCount(SCENE.GetNowScene()->GetPlayer()->GetKillCount() + 1);
+
+				SCENE.SetScore(SCENE.GetScore() + 100 * SCENE.GetComboCount());
+
+
+				SCENE.ComboReset();
+				Death_CoolDown = true;
 
 			}
 		}
 
-	}	
+	}
 
-	mat = Math::Matrix::CreateRotationZ(pictangle) *
-		Math::Matrix::CreateTranslation(pos.x-PlayerScroll.x, pos.y-PlayerScroll.y, 0);
+	mat = Math::Matrix::CreateScale(2.5f, 2.5f, 1.0f) * Math::Matrix::CreateRotationZ(pictangle) *
+		Math::Matrix::CreateTranslation(pos.x - PlayerScroll.x, pos.y - PlayerScroll.y, 0);
 
-		d_a->Update();
-	
+	d_a->Update();
+
 }
 
 void C_Enemy::Draw()
 {
-	
-		d_a->Draw();
-	
+
+	d_a->Draw();
+
 	D3D.SetBlendState(BlendMode::Add);
 
-	for(auto &g:grass)
+	for (auto& g : grass)
 	{
-		g->Draw(Math::Color{0,1,0,1});
+		g->Draw(Math::Color{ 0,0.5f,0.5f,1 });
 	}
 	D3D.SetBlendState(BlendMode::Alpha);
 
@@ -87,13 +91,13 @@ void C_Enemy::Init(float circlesize)
 {
 	radius = circlesize;
 
-	pos = Math::Vector2(rand()%3200-1600, 400);
+	pos = Math::Vector2(rand() % 3200 - 1600, 400);
 	move = { 0,0 };
 	movecount = { 0,0 };
 	posMax = { radius,radius };
 	angle = (float)(rand() % 360) * (3.141592f / 180.0f);
 	center = { 0.0f, 0.0f };
-	speed = rand() %  3 + 5;
+	speed = rand() % 3 + 5;
 	//speed = 5;
 
 	Death_CoolDown = false;
@@ -102,8 +106,16 @@ void C_Enemy::Init(float circlesize)
 
 void C_Enemy::Action()
 {
+
 	PlayerScroll = SCENE.GetNowScene()->GetPlayer()->GetScroll();
 	PlayerAlive = SCENE.GetNowScene()->GetPlayer()->GetAlive();
+
+	if (abs(Math::Vector2{ SCENE.GetNowScene()->GetPlayer()->GetPos() - pos }.x) > SCENE.GetWindowWIDTH()
+		|| abs(Math::Vector2{ SCENE.GetNowScene()->GetPlayer()->GetPos() - pos }.y) > SCENE.GetWindowHEIGHT())
+	{
+		Reborn();
+
+	}
 	if (!alive || !PlayerAlive)
 	{
 		if (PlayerAlive)
@@ -119,20 +131,52 @@ void C_Enemy::Action()
 		}
 		return;
 	}
+
 	if (alive)
 	{
-
-
+		Math::Vector2 PlayerPos = SCENE.GetNowScene()->GetPlayer()->GetPos();
+		Math::Vector2 EnemyVec;
+		EnemyVec = PlayerPos - pos;
 		pictangle = atan2f(
-			SCENE.GetNowScene()->GetPlayer()->GetPos().y - pos.y,
-			SCENE.GetNowScene()->GetPlayer()->GetPos().x - pos.x
+			EnemyVec.y,
+			EnemyVec.x
 		);
 		pictangle -= ToRadians(90);
-
-		move = Math::Vector2(cosf(pictangle + ToRadians(90)) * speed, sinf(pictangle + ToRadians(90)) * speed);
+		EnemyVec.Normalize();
+		move = Math::Vector2(EnemyVec * speed);
 
 
 	}
+
+}
+
+void C_Enemy::Reborn()
+{
+	if (SCENE.GetNowScene()->GetBossBattle())
+	{
+		return;
+	}
+
+	int WindowWIDTH = SCENE.GetWindowWIDTH();
+
+	HP = maxHP;
+	color = { 1,1,1,1 };
+	//PlayerAlive = true;
+	moveswitch = false;
+	movecount = { 0,0 };
+	alive = true;
+	if (rand() % 100 > 50)
+	{
+		pos = Math::Vector2(rand() % WindowWIDTH - (WindowWIDTH / 2), 400) + PlayerScroll;
+
+	}
+	else
+	{
+		pos = Math::Vector2(rand() % WindowWIDTH - (WindowWIDTH / 2), -400) + PlayerScroll;
+	}
+
+
+
 }
 
 void C_Enemy::SetGrassTex(KdTexture* _tex)

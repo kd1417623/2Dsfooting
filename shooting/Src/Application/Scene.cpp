@@ -20,12 +20,17 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
+
+
+
 	if (m_nowScene==nullptr)
 	{
 		return;
 	}
 	m_nowScene->Update();
-	
+
+
+	ComboUpdate();
 
 
 
@@ -35,6 +40,7 @@ void Scene::Update()
 
 void Scene::Init()
 {
+	ShowCursor(false);
 	srand(time(0));
 	m_nowScene = std::make_shared<TitleScene>();
 
@@ -49,8 +55,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
-	
+	return
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
@@ -59,6 +64,8 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
+
+		m_nowScene->ImGuiUpdate();
 	}
 	ImGui::End();
 }

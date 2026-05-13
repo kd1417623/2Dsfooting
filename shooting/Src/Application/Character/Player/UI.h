@@ -21,6 +21,19 @@ public:
 
 
 	void SetScoreDecoTex(KdTexture* _tex) { NumDecoTex = _tex; }
+
+
+	void ComboDraw();
+	void ComboUpdate();
+
+
+	void SetComboTextTex(KdTexture* _tex) { ComboTextTex = _tex; }
+
+	void DrawCursor();
+
+	void SetCursorTex(KdTexture* _tex) { CursorTex = _tex; }
+
+	
 private:
 	KdTexture* HpBarTex;
 	KdTexture* HpBarMaxTex;
@@ -45,6 +58,17 @@ private:
 	Math::Matrix NumDecoMat[2];
 	KdTexture* NumDecoTex;
 
+
+	static const int ComboNumMax = 3;
+	Math::Matrix ComboMat[ComboNumMax];
+
+	float ComboRectY[ComboNumMax] = { {} };
+
+	Math::Matrix ComboTextMat;
+	KdTexture* ComboTextTex;
+
+
+	KdTexture* CursorTex;
 
 };
 

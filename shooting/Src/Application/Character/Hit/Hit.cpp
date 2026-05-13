@@ -5,6 +5,7 @@
 #include"../Skill/Bullet.h"
 #include"../Enemy/EnemyTurret.h"
 #include"../../Scene/SceneBase.h"
+#include"../Enemy/Boss.h"
 static const int WindowWIDTH = 1280;
 static const int WindowHEIGHT = 720;
 
@@ -94,10 +95,10 @@ void C_Hit::Enemy_BulletHit()
 		{
 			C_Enemy* enemy = SCENE.GetNowScene()->GetEnemy(h);
 			C_Bullet* bullet = SCENE.GetNowScene()->GetPlayer()->GetBullet(i);
-			if (!bullet->IsShot())
+			if (!bullet->IsShot()||!enemy->GetAlive())
 			{
 
-				break;
+				continue;
 			}
 			Math::Vector2 enemyPos = enemy->GetPos();
 			//Math::Vector2 bulletPos = bullet->GetPos()+SCENE.GetPlayer()->GetScroll();
@@ -118,7 +119,7 @@ void C_Hit::Enemy_BulletHit()
 				dx /= dist;//x距離/直接距離(現在の角度に変換)
 				dy /= dist;//y距離/直接距離(現在の角度に変換)
 				enemy->SetPos(enemyPos + Math::Vector2(dx * push, dy * push));
-				enemy->Damage(10);
+				enemy->Damage((SCENE.GetComboCount()+1)*5);
 				bullet->Setshot(false);
 			}
 
@@ -228,6 +229,7 @@ void C_Hit::Turret_playerHit()
 						PlayerInvincibleTime = 0;
 						PlayerInvincibleTime = PlayerInvincibleMaxTime/3;
 						player->Damage(5);
+						enemy->Setshot(false);
 						//enemy->SetMove({ 0,0 });
 					}
 
@@ -285,6 +287,52 @@ void C_Hit::Turret_BulletHit()
 
 }
 
+void C_Hit::Boss_BulletHit()
+{
+	for (int i = 0; i < SCENE.GetNowScene()->GetPlayer()->GetBulletNum(); i++)
+	{
+
+		
+			C_BOSS* enemy = SCENE.GetNowScene()->GetBoss();
+			C_Bullet* bullet = SCENE.GetNowScene()->GetPlayer()->GetBullet(i);
+			if (!bullet->IsShot())
+			{
+
+				continue;
+			}
+			Math::Vector2 enemyPos = enemy->GetPos();
+			//Math::Vector2 bulletPos = bullet->GetPos()+SCENE.GetPlayer()->GetScroll();
+			Math::Vector2 bulletPos = bullet->GetPos();
+			
+			Math::Vector2 Dir = enemyPos - bulletPos;
+			float Dist = Dir.Length();
+
+			
+
+			float minDist =80.0f;//最低距離
+
+			if (Dist < minDist )
+			{
+			
+				if (SCENE.GetComboCount()>SCENE.GetMaxCombo())
+				{
+					enemy->Damage((SCENE.GetComboCount() + 1) * 5);
+
+				}
+				else
+				{
+					enemy->Damage((SCENE.GetMaxCombo() + 1) * 5);
+				}
+				bullet->Setshot(false);
+			}
+
+
+
+		
+
+	}
+}
+
 Math::Vector2 C_Hit::DisCompare()
 {
 	C_Player* player = SCENE.GetNowScene()->GetPlayer();
@@ -299,17 +347,27 @@ Math::Vector2 C_Hit::DisCompare()
 	for (int i = 0;i < SCENE.GetNowScene()->GetEnemynum();i++)
 	{
 
+		if(!SCENE.GetNowScene()->GetEnemy(i)->GetAlive())
+			{
+			continue;
+		}
+
 	 enemypos = SCENE.GetNowScene()->GetEnemy(i)->GetPos();
 	 CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}
 	for (int i = 0; i < SCENE.GetNowScene()->GetTurretNum(); i++)
 	{
+		if (!SCENE.GetNowScene()->GetTurret(i)->GetAlive())
+		{
+			continue;
+		}
 		enemypos = SCENE.GetNowScene()->GetTurret(i)->GetPos();
 		CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 
 	}
+	enemypos = SCENE.GetNowScene()->GetBoss()->GetPos();
+	CheckClose(enemypos, playerPos, CloseDist, ReturnPos);
 	return ReturnPos;	
 }
-
 

@@ -5,6 +5,7 @@
 #include"../Character/Hit/Hit.h"
 #include"../Background/Background.h"
 #include"../Background/Object.h"
+#include"../Character/Player/UI.h"
 void SceneBase::AllNew()
 {// 画像の読み込み処理
 	BackObjTex[0].Load("Texture/object.png");
@@ -14,10 +15,15 @@ void SceneBase::AllNew()
 	enemyTex.Load("Texture/enemy.png");
 	grassTex.Load("Texture/Grass3.png");
 	TurretTex.Load("Texture/enemy2.png");
-	bulletTex.Load("Texture/bullet.png");
+	bulletTex.Load("Texture/bullet2.png");
 
+
+	CursorTex.Load("Texture/cirsol.png");
 	player = std::make_shared< C_Player>();
 	hit = std::make_shared< C_Hit>();
+
+	m_ui = std::make_shared<UI>();
+	m_ui->SetCursorTex(&CursorTex);
 
 	background = std::make_shared< C_Background>();
 	for (auto& i : backobj)
@@ -31,6 +37,7 @@ void SceneBase::AllNew()
 		i = std::make_shared< EnemyTurret>();
 		i->SetTex(&TurretTex);
 		i->SetBulletTex(&bulletTex);
+		i->GrassSetTex(&grassTex);
 	}
 
 	for (auto& i : enemy)
@@ -41,6 +48,7 @@ void SceneBase::AllNew()
 	}
 
 	player->SetTex(&playerTex);
+	
 	backobj[0]->SetTex(&BackObjTex[0]);
 	backobj[1]->SetTex(&BackObjTex[1]);
 	player->BulletSetTex(&bulletTex);

@@ -162,7 +162,10 @@
     <ClInclude Include="Src\Application\Background\Background.h" />
     <ClInclude Include="Src\Application\Background\Object.h" />
     <ClInclude Include="Src\Application\Character\CharacterBase.h" />
+    <ClInclude Include="Src\Application\Character\Effect\Glassval2.h" />
     <ClInclude Include="Src\Application\Character\Effect\Grass.h" />
+    <ClInclude Include="Src\Application\Character\Effect\Nois.h" />
+    <ClInclude Include="Src\Application\Character\Enemy\Boss.h" />
     <ClInclude Include="Src\Application\Character\Enemy\Enemy.h" />
     <ClInclude Include="Src\Application\Character\Enemy\EnemyTurret.h" />
     <ClInclude Include="Src\Application\Character\Hit\Hit.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Src\Application\Character\Player\UI.h" />
     <ClInclude Include="Src\Application\Character\Skill\Bullet.h" />
     <ClInclude Include="Src\Application\Character\Skill\DamegeArea.h" />
+    <ClInclude Include="Src\Application\Character\Skill\Laser.h" />
     <ClInclude Include="Src\Application\Scene.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Application\Scene\GameScene.h" />
@@ -203,7 +207,10 @@
     <ClCompile Include="Src\Application\Background\Background.cpp" />
     <ClCompile Include="Src\Application\Background\Object.cpp" />
     <ClCompile Include="Src\Application\Character\CharacterBase.cpp" />
+    <ClCompile Include="Src\Application\Character\Effect\Glassval2.cpp" />
     <ClCompile Include="Src\Application\Character\Effect\Grass.cpp" />
+    <ClCompile Include="Src\Application\Character\Effect\Nois.cpp" />
+    <ClCompile Include="Src\Application\Character\Enemy\Boss.cpp" />
     <ClCompile Include="Src\Application\Character\Enemy\Enemy.cpp" />
     <ClCompile Include="Src\Application\Character\Enemy\EnemyTurret.cpp" />
     <ClCompile Include="Src\Application\Character\Hit\Hit.cpp" />
@@ -211,6 +218,7 @@
     <ClCompile Include="Src\Application\Character\Player\UI.cpp" />
     <ClCompile Include="Src\Application\Character\Skill\Bullet.cpp" />
     <ClCompile Include="Src\Application\Character\Skill\DamegeArea.cpp" />
+    <ClCompile Include="Src\Application\Character\Skill\Laser.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Application\Scene\GameScene.cpp" />
